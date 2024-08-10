@@ -19,10 +19,8 @@ namespace ArtcordAdminBot.Database
             command.CommandText = @"
                 CREATE TABLE IF NOT EXISTS CommandLogs (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    UserId TEXT NOT NULL,
-                    UserName TEXT NOT NULL,
-                    CommandName TEXT NOT NULL,
-                    CommandArgs TEXT,
+                    UserId TEXT NOT NULL,  -- Storing UserId as TEXT since SQLite does not have an unsigned long type
+                    Command TEXT NOT NULL, -- Merged CommandName and CommandArgs into a single Command field
                     Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
                 );
             ";
