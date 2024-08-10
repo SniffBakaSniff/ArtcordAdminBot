@@ -25,7 +25,7 @@ The project is structured as follows:
 1. **Clone the Repository:**
    ```sh
    git clone <repository-url>
-   cd DSharpPlusTemplate
+   cd ArtcordAdminBot
    ```
 
 2. **Install Dependencies:**
