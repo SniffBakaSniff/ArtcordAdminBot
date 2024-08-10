@@ -1,8 +1,7 @@
----
+# ArtcordAdminBot
 
-# [DSharpPlus](https://dsharpplus.github.io/DSharpPlus/) Bot Template
-
-This repository is for the ArtcordAdminBot.
+This project is made using C# and [DSharpPlus](https://dsharpplus.github.io/DSharpPlus/) and [SQLite](https://www.sqlite.org/index.html). 
+It's a custom moderation Discord bot made for the [ArtCord Discord Server](https://discord.gg/ArtCord). 
 
 ## Project Structure
 
@@ -24,7 +23,7 @@ The project is structured as follows:
 
 1. **Clone the Repository:**
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/SniffBakaSniff/ArtcordAdminBot
    cd ArtcordAdminBot
    ```
 
@@ -36,14 +35,14 @@ The project is structured as follows:
    sudo pacman -S dotnet-sdk
    ```
 
-3. **Configure Your Bot Token:**
-   Update `appsettings.json` with your bot's token:
+3. **Configure the configuration file:**
+   Create a file named `appsettings.json` with the following contents:
    ```json
    {
      "Token": "YOUR_BOT_TOKEN_HERE"
    }
    ```
-   You can get it from the [Discord Dev Portal](https://discord.com/developers/applications).
+   Replace `YOUR_BOT_TOKEN_HERE` with your Discord Bot's token, which you can get from [Discord's Developer Portal](https://discord.com/developers/applications).
 
 4. **Build the Project:**
    ```sh
@@ -54,6 +53,8 @@ The project is structured as follows:
    ```sh
    dotnet run
    ```
+
+Alternatively, you can open the project using [Visual Studio](https://visualstudio.microsoft.com/), which will handle everything except for step 1 and 3 for you. 
 
 ## Features
 
