@@ -11,8 +11,8 @@ namespace ArtcordAdminBot.Features
         [SlashCommand("viewlogs", "Displays the command logs.")]
         public async Task ViewLogsCommand(InteractionContext ctx)
         {
-            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), ctx.User.Username, "viewlogs", null);
-
+            // Log the command execution to the database
+            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), "/viewlogs");
 
             // Retrieve the logs from the database
             var logs = await DatabaseHelper.GetCommandLogsAsync();
@@ -24,7 +24,7 @@ namespace ArtcordAdminBot.Features
 
             foreach (var log in logs)
             {
-                sb.AppendLine($"[{log.Timestamp}] {log.UserName} ({log.UserId}) executed {log.CommandName} {log.CommandArgs}");
+                sb.AppendLine($"[{log.Timestamp}] UserId: {log.UserId} executed Command: {log.Command}");
             }
 
             sb.AppendLine("```");
