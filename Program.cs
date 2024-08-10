@@ -14,27 +14,24 @@ namespace ArtcordAdminBot
         static async Task Main(string[] args)
         {
             // Load configuration from appsettings.json file.
-            // This configuration file should contain the bot token and other settings.
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) // Set the base path to the current directory.
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Add the JSON configuration file.
-                .Build(); // Build the configuration object.
+                .SetBasePath(Directory.GetCurrentDirectory()) 
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) 
+                .Build();
 
-            // Create and configure the Discord client.
             var discord = new DiscordClient(new DiscordConfiguration
             {
-                Token = configuration["Token"], // Retrieve the bot token from the configuration file. (appsettings.json)
-                TokenType = TokenType.Bot, // Specify that this token is for a bot.
-                Intents = DiscordIntents.AllUnprivileged // Define the intents for the bot's operations.
+                Token = configuration["Token"],
+                TokenType = TokenType.Bot, 
+                Intents = DiscordIntents.AllUnprivileged
             });
 
             // Initialize the database
             await DatabaseHelper.InitializeDatabaseAsync();
 
-            // Register the SlashCommands extension with the Discord client.
+
             var slash = discord.UseSlashCommands();
 
-            // Register the CommandsModule class to handle slash commands.
             slash.RegisterCommands<CommandsModule>();
             slash.RegisterCommands<BanCommandsModule>();
             slash.RegisterCommands<CommandLogModule>();
@@ -42,7 +39,6 @@ namespace ArtcordAdminBot
             // Attach the OnReady event handler to the Discord client.
             discord.Ready += EventsModule.OnReady;
 
-            // Connect the bot to Discord.
             await discord.ConnectAsync();
             
             // Keep the bot running indefinitely.

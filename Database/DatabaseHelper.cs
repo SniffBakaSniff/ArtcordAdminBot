@@ -9,7 +9,9 @@ namespace ArtcordAdminBot.Database
     {
         private static readonly string connectionString = "Data Source=Database/ArtcordAdminBot.db";
 
-        // Initializes the database and creates the necessary tables if they don't exist
+        /// <summary>
+        /// Initializes the database and creates the necessary tables if they don't exist
+        /// </summary>
         public static async Task InitializeDatabaseAsync()
         {
             using var connection = new SqliteConnection(connectionString);
@@ -28,7 +30,9 @@ namespace ArtcordAdminBot.Database
             await command.ExecuteNonQueryAsync();
         }
 
-        // Logs a command execution to the database
+        /// <summary>
+        /// Logs a command execution to the database
+        /// </summary>
         public static async Task LogCommandAsync(string userId, string command)
         {
             using var connection = new SqliteConnection(connectionString);
@@ -46,7 +50,9 @@ namespace ArtcordAdminBot.Database
             await commandText.ExecuteNonQueryAsync();
         }
 
-        // Retrieves all command logs from the database
+        /// <summary>
+        /// Retrieves all command logs from the database
+        /// </summary>
         public static async Task<List<CommandLog>> GetCommandLogsAsync()
         {
             var logs = new List<CommandLog>();
@@ -77,7 +83,9 @@ namespace ArtcordAdminBot.Database
         }
     }
 
-    // Represents a log entry for a command execution
+    /// <summary>
+    /// Represents a log entry for a command execution
+    /// </summary>
     public class CommandLog
     {
         public int Id { get; set; }
