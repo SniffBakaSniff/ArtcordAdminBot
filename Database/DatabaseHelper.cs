@@ -87,10 +87,10 @@ namespace ArtcordAdminBot.Database
     public class CommandLog
     {
         public int Id { get; set; }
-        public string UserId { get; set; } = string.Empty; // Initialize to an empty string to avoid null warnings
-        public string UserName { get; set; } = string.Empty; // Initialize to an empty string to avoid null warnings
-        public string CommandName { get; set; } = string.Empty; // Initialize to an empty string to avoid null warnings
-        public string? CommandArgs { get; set; } // Nullable to handle optional arguments
+        public string UserId { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+        public string CommandName { get; set; } = string.Empty;
+        public string? CommandArgs { get; set; }
         public DateTime Timestamp { get; set; }
     }
 }
