@@ -19,8 +19,8 @@ namespace ArtcordAdminBot.Database
             command.CommandText = @"
                 CREATE TABLE IF NOT EXISTS CommandLogs (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    UserId TEXT NOT NULL,  -- Storing UserId as TEXT since SQLite does not have an unsigned long type
-                    Command TEXT NOT NULL, -- Merged CommandName and CommandArgs into a single Command field
+                    UserId TEXT NOT NULL,
+                    Command TEXT NOT NULL,
                     Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
                 );
             ";
@@ -29,23 +29,21 @@ namespace ArtcordAdminBot.Database
         }
 
         // Logs a command execution to the database
-        public static async Task LogCommandAsync(string userId, string userName, string commandName, string commandArgs)
+        public static async Task LogCommandAsync(string userId, string command)
         {
             using var connection = new SqliteConnection(connectionString);
             await connection.OpenAsync();
 
-            var command = connection.CreateCommand();
-            command.CommandText = @"
-                INSERT INTO CommandLogs (UserId, UserName, CommandName, CommandArgs)
-                VALUES ($userId, $userName, $commandName, $commandArgs);
+            var commandText = connection.CreateCommand();
+            commandText.CommandText = @"
+                INSERT INTO CommandLogs (UserId, Command)
+                VALUES ($userId, $command);
             ";
 
-            command.Parameters.AddWithValue("$userId", userId);
-            command.Parameters.AddWithValue("$userName", userName);
-            command.Parameters.AddWithValue("$commandName", commandName);
-            command.Parameters.AddWithValue("$commandArgs", commandArgs ?? (object)DBNull.Value);
+            commandText.Parameters.AddWithValue("$userId", userId);
+            commandText.Parameters.AddWithValue("$command", command);
 
-            await command.ExecuteNonQueryAsync();
+            await commandText.ExecuteNonQueryAsync();
         }
 
         // Retrieves all command logs from the database
@@ -58,7 +56,7 @@ namespace ArtcordAdminBot.Database
 
             var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT Id, UserId, UserName, CommandName, CommandArgs, Timestamp
+                SELECT Id, UserId, Command, Timestamp
                 FROM CommandLogs
                 ORDER BY Timestamp DESC;
             ";
@@ -70,10 +68,8 @@ namespace ArtcordAdminBot.Database
                 {
                     Id = reader.GetInt32(0),
                     UserId = reader.GetString(1),
-                    UserName = reader.GetString(2),
-                    CommandName = reader.GetString(3),
-                    CommandArgs = reader.IsDBNull(4) ? null : reader.GetString(4),
-                    Timestamp = reader.GetDateTime(5)
+                    Command = reader.GetString(2),
+                    Timestamp = reader.GetDateTime(3)
                 });
             }
 
@@ -86,9 +82,7 @@ namespace ArtcordAdminBot.Database
     {
         public int Id { get; set; }
         public string UserId { get; set; } = string.Empty;
-        public string UserName { get; set; } = string.Empty;
-        public string CommandName { get; set; } = string.Empty;
-        public string? CommandArgs { get; set; }
+        public string Command { get; set; } = string.Empty;
         public DateTime Timestamp { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace ArtcordAdminBot.Features
         public async Task BanCommand(InteractionContext ctx,
             [Option("user", "The user to ban")] DiscordUser user)
         {
-            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), ctx.User.Username, "ban", null);
+            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), "ban");
 
             // Create an embed response showing the user being banned
             var embedResponse = new DiscordEmbedBuilder
@@ -31,7 +31,7 @@ namespace ArtcordAdminBot.Features
         public async Task UnbanCommand(InteractionContext ctx,
             [Option("user", "The user to unban")] DiscordUser user)
         {
-            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), ctx.User.Username, "unban", null);
+            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), "unban");
 
             // Create an embed response showing the user being unbanned
             var embedResponse = new DiscordEmbedBuilder

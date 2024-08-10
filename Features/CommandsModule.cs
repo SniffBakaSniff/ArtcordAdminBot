@@ -16,7 +16,7 @@ namespace ArtcordAdminBot.Features
             [Option("embed", "Should the response be an embed?")] bool embed = false)
         {
             // Log the command
-            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), ctx.User.Username, "ping", null);
+            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), "/ping");
 
             // If the 'embed' option is true, send an embedded response.
             if (embed)
@@ -49,7 +49,7 @@ namespace ArtcordAdminBot.Features
             [Option("embed", "Should the response be an embed?")] bool embed = false)
         {
             // Log the command
-            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), ctx.User.Username, "echo", null);
+            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), "/echo");
 
             // If the 'embed' option is true, send an embedded response.
             if (embed)
