@@ -6,7 +6,9 @@ using ArtcordAdminBot.Database;
 
 namespace ArtcordAdminBot.Features
 {
-    // CommandsModule class contains the slash commands for the Discord bot.
+    /// <summary>
+    /// Contains the slash commands for the Discord bot.
+    /// </summary>
     public class CommandsModule : ApplicationCommandModule
     {
         // PingCommand is a slash command that responds with "Pong!" when invoked.

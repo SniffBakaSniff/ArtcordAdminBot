@@ -4,17 +4,20 @@ using System.Threading.Tasks;
 
 namespace ArtcordAdminBot.Features
 {
-    // EventsModule class handles events for the Discord bot.
+    /// <summary>
+    /// Handles events for the Discord bot.
+    /// </summary>
     public class EventsModule
     {
-        // OnReady is an event handler that gets triggered when the bot is ready and connected to Discord.
+        /// <summary>
+        /// Gets triggered when the bot is ready and connected to Discord.
+        /// </summary>
+        /// <param name="sender">The instance of the bot client</param>
+        /// <param name="e">Event-specific data</param>
         public static Task OnReady(DiscordClient sender, ReadyEventArgs e)
         {
-            // Print a message to the console indicating the bot has successfully logged in and is ready.
-            // 'sender' refers to the instance of the bot client, and 'e' contains event-specific data.
             Console.WriteLine($"Logged in as {sender.CurrentUser.Username}");
             
-            // Return a completed task to signify that the event handling is done.
             return Task.CompletedTask;
         }
     }
