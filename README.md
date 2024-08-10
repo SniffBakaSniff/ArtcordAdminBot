@@ -2,7 +2,7 @@
 
 # [DSharpPlus](https://dsharpplus.github.io/DSharpPlus/) Bot Template
 
-This repository provides a template for creating a Discord bot using DSharpPlus in C#. It includes a basic setup for handling commands and events. 
+This repository is for the ArtcordAdminBot.
 
 ## Project Structure
 
