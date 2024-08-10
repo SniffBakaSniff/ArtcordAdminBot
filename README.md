@@ -43,7 +43,7 @@ The project is structured as follows:
      "Token": "YOUR_BOT_TOKEN_HERE"
    }
    ```
-   You can get it from the [Discord Dev Portal](https://discord.com/developers/applications)
+   You can get it from the [Discord Dev Portal](https://discord.com/developers/applications).
 
 4. **Build the Project:**
    ```sh
