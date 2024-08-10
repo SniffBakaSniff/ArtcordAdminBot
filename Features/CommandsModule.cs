@@ -2,6 +2,7 @@ using DSharpPlus;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.Entities;
 using System.Threading.Tasks;
+using ArtcordAdminBot.Database;
 
 namespace ArtcordAdminBot.Features
 {
@@ -14,6 +15,9 @@ namespace ArtcordAdminBot.Features
             // The 'embed' option determines if the response should be an embed. Default is false.
             [Option("embed", "Should the response be an embed?")] bool embed = false)
         {
+            // Log the command
+            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), ctx.User.Username, "ping", null);
+
             // If the 'embed' option is true, send an embedded response.
             if (embed)
             {
@@ -44,6 +48,9 @@ namespace ArtcordAdminBot.Features
             // The 'embed' option determines if the response should be an embed. Default is false.
             [Option("embed", "Should the response be an embed?")] bool embed = false)
         {
+            // Log the command
+            await DatabaseHelper.LogCommandAsync(ctx.User.Id.ToString(), ctx.User.Username, "echo", null);
+
             // If the 'embed' option is true, send an embedded response.
             if (embed)
             {

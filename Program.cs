@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using ArtcordAdminBot.Database;
 using ArtcordAdminBot.Features;
 
 namespace ArtcordAdminBot
@@ -27,11 +28,16 @@ namespace ArtcordAdminBot
                 Intents = DiscordIntents.AllUnprivileged // Define the intents for the bot's operations.
             });
 
+            // Initialize the database
+            await DatabaseHelper.InitializeDatabaseAsync();
+
             // Register the SlashCommands extension with the Discord client.
             var slash = discord.UseSlashCommands();
 
             // Register the CommandsModule class to handle slash commands.
             slash.RegisterCommands<CommandsModule>();
+            slash.RegisterCommands<BanCommandsModule>();
+            slash.RegisterCommands<CommandLogModule>();
 
             // Attach the OnReady event handler to the Discord client.
             discord.Ready += EventsModule.OnReady;
