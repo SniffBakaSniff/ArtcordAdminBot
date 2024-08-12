@@ -35,14 +35,9 @@ The project is structured as follows:
    sudo pacman -S dotnet-sdk
    ```
 
-3. **Configure the configuration file:**
-   Create a file named `appsettings.json` with the following contents:
-   ```json
-   {
-     "Token": "YOUR_BOT_TOKEN_HERE"
-   }
-   ```
-   Replace `YOUR_BOT_TOKEN_HERE` with your Discord Bot's token, which you can get from [Discord's Developer Portal](https://discord.com/developers/applications).
+3. **Configure your bot's token:**
+   Create an environment variable named "DISCORD_TOKEN" in your system, with the value being your bot's token.	 
+   In Windows this can be done by searching for "Edit the system environment variables", and in the window that pops up pressing "Environment variables...", "New..." and putting in the information.
 
 4. **Build the Project:**
    ```sh
@@ -58,14 +53,9 @@ Alternatively, you can open the project using [Visual Studio](https://visualstud
 
 ## Features
 
-- **CommandsModule.cs:**
-  - Contains the `CommandsModule` class with example commands (`/ping` and `/echo`).
-  - Commands support optional parameters for sending responses as embedded messages or plain text.
+This folder contains the commands of the bot, and a sub-folder with helper classes.
 
-- **EventsModule.cs:**
-  - Contains the `EventsModule` class with an example event handler for when the bot is ready.
-
-## Commands
+### Commands
 Precise description on commands can be found in the [Documentation/Commands](./Documentation) folder.
 
 - [config](./Documentation/Commands/config.md): Config options. Web interface for this is coming soon. 
