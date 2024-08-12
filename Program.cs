@@ -1,48 +1,60 @@
 ﻿using DSharpPlus;
-using DSharpPlus.SlashCommands;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using ArtcordAdminBot.Database;
+using DSharpPlus.Entities;
+using DSharpPlus.Commands;
+using DSharpPlus.Commands.Processors.TextCommands;
+using DSharpPlus.Commands.Processors.SlashCommands;
 using ArtcordAdminBot.Features;
+using DSharpPlus.Commands.Processors.TextCommands.Parsing;
 
 namespace ArtcordAdminBot
 {
     class Program
     {
-        static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            // Load configuration from appsettings.json file.
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) 
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) 
-                .Build();
-
-            var discord = new DiscordClient(new DiscordConfiguration
+            string? discordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
+            if (string.IsNullOrWhiteSpace(discordToken))
             {
-                Token = configuration["Token"],
-                TokenType = TokenType.Bot, 
-                Intents = DiscordIntents.AllUnprivileged
-            });
+                Console.WriteLine("Error: No discord token found. Please provide a token via the DISCORD_TOKEN environment variable.");
+                Environment.Exit(1);
+            }
 
-            // Initialize the database
-            await DatabaseHelper.InitializeDatabaseAsync();
+            DiscordClientBuilder builder = DiscordClientBuilder.CreateDefault(discordToken, TextCommandProcessor.RequiredIntents | SlashCommandProcessor.RequiredIntents | DiscordIntents.MessageContents);
 
+            // Use the commands extension
+            builder.UseCommands
+            (
+                // we register our commands here
+                extension =>
+                {
+                    extension.AddCommands([typeof(EchoCommand)]);
+                    TextCommandProcessor textCommandProcessor = new(new()
+                    {
+                        PrefixResolver = new DefaultPrefixResolver(true, "?", ".").ResolvePrefixAsync
+                    });
 
-            var slash = discord.UseSlashCommands();
+                    // Add text commands with a custom prefix (?ping)
+                    extension.AddProcessors(textCommandProcessor);
+                },
+                new CommandsConfiguration()
+                {
+                    DebugGuildId = 1219490918235901962,
+                    // The default value, however it's shown here for clarity
+                    RegisterDefaultCommandProcessors = true
+                }
+            );
 
-            slash.RegisterCommands<CommandsModule>();
-            slash.RegisterCommands<BanCommandsModule>();
-            slash.RegisterCommands<CommandLogModule>();
+            DiscordClient client = builder.Build();
 
-            // Attach the OnReady event handler to the Discord client.
-            discord.Ready += EventsModule.OnReady;
+            // We can specify a status for our bot. Let's set it to "playing" and set the activity to "with fire".
+            DiscordActivity status = new("with fire", DiscordActivityType.Playing);
 
-            await discord.ConnectAsync();
-            
-            // Keep the bot running indefinitely.
+            // Now we connect and log in.
+            await client.ConnectAsync(status, DiscordUserStatus.Online);
+
+            // And now we wait infinitely so that our bot actually stays connected.
             await Task.Delay(-1);
         }
+
     }
 }

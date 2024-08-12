@@ -14,7 +14,7 @@ namespace ArtcordAdminBot.Features
         /// </summary>
         /// <param name="sender">The instance of the bot client</param>
         /// <param name="e">Event-specific data</param>
-        public static Task OnReady(DiscordClient sender, ReadyEventArgs e)
+        public static Task OnReady(DiscordClient sender)
         {
             Console.WriteLine($"Logged in as {sender.CurrentUser.Username}");
             
