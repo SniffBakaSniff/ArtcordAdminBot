@@ -65,6 +65,12 @@ Alternatively, you can open the project using [Visual Studio](https://visualstud
 - **EventsModule.cs:**
   - Contains the `EventsModule` class with an example event handler for when the bot is ready.
 
+## Commands
+Precise description on commands can be found in the [Documentation/Commands](./Documentation) folder.
+
+- [config](./Documentation/Commands/config.md): Config options. Web interface for this is coming soon. 
+- [echo](./Documentation/Commands/echo.md): Repeat a phrase.
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
