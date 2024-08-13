@@ -7,16 +7,25 @@ It's a custom moderation Discord bot made for the [ArtCord Discord Server](https
 
 The project is structured as follows:
 
-[obsolete, todo: update this]
-
 ```
 /ArtcordAdminBot
 │
-├── /Features
-│   ├── CommandsModule.cs      # Contains command handlers for the bot
-│   └── EventsModule.cs        # Contains event handlers for the bot
+├── /Database
+│   └── DatabaseHelper.cs      # Contains database operations and utility functions
 │
-├── appsettings.json           # Configuration file for bot token and other settings
+├── /Documentation
+│   ├── usage.md               # General usage guide for the bot
+│   └── /Commands
+│       ├── config.md          # Documentation for the config command group
+│       ├── echo.md            # Documentation for the echo command
+│       └── purge.md           # Documentation for the purge command
+│
+├── /Features
+│   ├── EchoCommand.cs         # Command handler for echo functionality
+│   ├── PurgeCommand.cs        # Command handler for purge functionality
+│   └── /Helpers
+│       └── MessageHelpers.cs  # Utility functions related to message handling
+│
 ├── Program.cs                 # Entry point of the application, sets up and runs the bot
 └── ArtcordAdminBot.csproj     # Project file, includes dependencies and build settings
 ```
