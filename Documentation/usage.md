@@ -8,23 +8,25 @@ Commands have arguments. The arguments are written in square brackets (`[]`) or 
 
 Square brackets (`[]`) mean that an argument is required, while angled brackets (`<>`) mean that an argument is not required and can be omitted. For non-required arguments, a default value can be provided using `=` after the type, such as in `<myArg (int)=10>` where, if you omit the argument, the value 10 will be used.
 
-Data types are put after the argument name, such as `[myArg (string)]`, and can be mixed using the `|` character, which means that either of the listed data types are supported, such as in `[myArg (string|user[]|int.1.10)]` where a string, a user or an int going from 1 to 10 is supported.
+Data types are put after the argument name, such as `[myArg (string)]`, and can be mixed using the `|` character, which means that either of the listed data types are supported, such as in `[myArg (string|user[]|int:1~10)]` where a string, a user or an int going from 1 to 10 is supported.
 
 ### Data types
 
 #### Basic data types
 
+- `boolean`: Can be either `True` or `False`.
+- 
 - `string`: Plain text. For non-slash commands, this must be put in quotes, such as `"Hello world"` instead of just `Hello world`. For slash commands, the quotes are argumental. You can use `\n` to write new-lines, `\"` to write quotes, and `\\` to write a backslash. 
 -
-- `int`: An long integer, going from `-9223372036854775808` to `9223372036854775807`.
-- `int.A`: An unsigned long integer, going from (inclusive) `A` to `18446744073709551615`, such as `int.0` for only positive numbers.
-- `int.A.B`: A long integer with (inclusive) bounds from `A` to `B`, such as `int.1.10`
+- `int`: An integer going from `-2147483648` to `2147483647`.
+- `int:A`: An integer going from (inclusive) `A` to `2147483647`, such as `int:0` for only positive numbers.
+- `int:A~B`: An integer with (inclusive) bounds from `A` to `B`, such as `int:1~10`
 - 
 - `float`: A floating point number or integer, going from `-1.7976931348623157E+308` to `1.7976931348623157E+308`.
-- `float.A`: A floating point number or integer, going from (inclusive) `A` to `1.7976931348623157E+308`, such as `float.0` for only positive numbers.
-- `float,A`: A floating point number or integer, going from (exclusive) `A` to (inclusive) `1.7976931348623157E+308`, such as `float,0` for only positive numbers excluding `0`.
-- `float.A.B`: A floating point number or integer with inclusive bounds. 
-- `float,A,B`: A floating point number or integer with exclusive bounds. `,` and `.` can be mixed.
+- `float:A`: A floating point number or integer, going from (inclusive) `A` to `1.7976931348623157E+308`, such as `float.0` for only positive numbers.
+- `float:A!`: A floating point number or integer, going from (exclusive) `A` to (inclusive) `1.7976931348623157E+308`, such as `float:0!` for only positive numbers excluding `0`.
+- `float:A~B`: A floating point number or integer with inclusive bounds. 
+- `float:A!~B!`: A floating point number or integer with exclusive bounds. `!` can be put for `A` or `B` regardless whether or not the other value has it.
 
 #### Discord-specific data types
 

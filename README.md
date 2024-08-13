@@ -7,6 +7,8 @@ It's a custom moderation Discord bot made for the [ArtCord Discord Server](https
 
 The project is structured as follows:
 
+[obsolete, todo: update this]
+
 ```
 /ArtcordAdminBot
 │
@@ -37,6 +39,7 @@ The project is structured as follows:
 
 3. **Configure your bot's token:**
    Create an environment variable named "DISCORD_TOKEN" in your system, with the value being your bot's token.	 
+
    In Windows this can be done by searching for "Edit the system environment variables", and in the window that pops up pressing "Environment variables...", "New..." and putting in the information.
 
 4. **Build the Project:**
@@ -56,10 +59,12 @@ Alternatively, you can open the project using [Visual Studio](https://visualstud
 This folder contains the commands of the bot, and a sub-folder with helper classes.
 
 ### Commands
-Precise description on commands can be found in the [Documentation/Commands](./Documentation) folder.
+Precise description on commands can be found in the [Documentation/Commands](./Documentation) folder. The general usage of commands is described in [usage.md](./Documentation/usage.md).
 
 - [config](./Documentation/Commands/config.md): Config options. Web interface for this is coming soon. 
-- [echo](./Documentation/Commands/echo.md): Repeat a phrase.
+- [echo](./Documentation/Commands/echo.md): Writes a message or an embed to the current channel or a different channel.
+- [purge](./Documentation/Commands/purge.md): Purges a specified number of messages from the current channel.
+
 
 ## License
 

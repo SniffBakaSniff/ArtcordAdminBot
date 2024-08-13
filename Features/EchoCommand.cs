@@ -32,7 +32,7 @@ namespace ArtcordAdminBot.Features
             [System.ComponentModel.Description("The description of the embed")] string message,
             [System.ComponentModel.Description("The channel the embed should be sent (current channel by default)")] DiscordChannel? channel = null,
             [System.ComponentModel.Description("The title above the description of the embed")] string? title = null,
-            [System.ComponentModel.Description("The footer below the description of the embed")] string footer = null,
+            [System.ComponentModel.Description("The footer below the description of the embed")] string? footer = null,
             [System.ComponentModel.Description("The author of the embed shown above the title")] DiscordUser? author = null,
             [System.ComponentModel.Description("The hex color code of the embed")] string color = "#5865f2",
             [System.ComponentModel.Description("Whether to include the current timestamp or not")] bool withTimestamp = false)
