@@ -22,7 +22,7 @@ namespace ArtcordAdminBot.Features
             channel.SendMessageAsync(message);
 
             return context.RespondAsync(
-                MessageHelpers.GenericSuccessEmbed($"Message successfully sent to {channel.Mention}")
+                MessageHelpers.GenericSuccessEmbed("Message sent", $"Message successfully sent to {channel.Mention}")
                 );
         }
 
@@ -67,7 +67,7 @@ namespace ArtcordAdminBot.Features
             channel.SendMessageAsync(embed);
 
             return context.RespondAsync(
-                MessageHelpers.GenericSuccessEmbed($"Embed successfully sent to {channel.Mention}")
+                MessageHelpers.GenericSuccessEmbed("Embed sent", $"Embed successfully sent to {channel.Mention}")
                 );
         }
     }

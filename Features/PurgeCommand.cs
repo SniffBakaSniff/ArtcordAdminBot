@@ -13,15 +13,15 @@ namespace ArtcordAdminBot.Features
     {
         [Command("purge")]
         [System.ComponentModel.Description("Purges a specified number of messages from the channel. Defaults to 10 if no number is specified.")]
-        public static async Task PurgeMessagesAsync(CommandContext context, int amount = 10)
+        public static async Task PurgeMessagesAsync(CommandContext context, [System.ComponentModel.Description("The amount of messages to purge from the channel (1 to 250)")] int amount = 10)
         {
             try
             {
-                // Ensure the count is positive and within a reasonable range (e.g., up to 250)
-                if (amount <= 0 || amount > 250)
+                // Ensure the count is within range
+                if (amount <= 1 || amount > 250)
                 {
                     await context.RespondAsync(
-                        MessageHelpers.GenericErrorEmbed("Please specify a positive number up to 250 for the number of messages to delete.")
+                        MessageHelpers.GenericErrorEmbed("A number from **1** to **250** must be provided for the parameter `amount`.")
                     );
                     return;
                 }
@@ -40,10 +40,16 @@ namespace ArtcordAdminBot.Features
                 {
                     await context.Channel.DeleteMessagesAsync(messages);
                 }
+                else
+                {
+                    await context.RespondAsync(
+                        MessageHelpers.GenericErrorEmbed("No messages to delete")
+                        );
+                }
 
                 // Send a confirmation embed
                 await context.RespondAsync(
-                        MessageHelpers.GenericEmbed("Purge Complete!", $"Successfully deleted {messages.Count} messages.")
+                        MessageHelpers.GenericSuccessEmbed("Purge complete!", $"Successfully deleted {messages.Count} message{(messages.Count == 1 ? "" : "s")}.")
                     );
                 return;
             }
