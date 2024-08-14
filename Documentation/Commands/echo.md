@@ -6,7 +6,7 @@ Writes a message or an embed to the current channel or a different channel.
 
 Normal, plain text messages.
 
-Usage:
+### Usage
 
 `/echo plain [message] <channel>`
 
@@ -18,7 +18,7 @@ Arguments:
 
 A message with an embed.
 
-Usage:
+### Usage
 
 `/echo embed [message] <channel> <title> <footer> <author> <color> <withTimestamp>`
 

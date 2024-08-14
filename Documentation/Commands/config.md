@@ -6,11 +6,11 @@ The `config` command allows staff to configure all types of settings. A web inte
 
 The prefix to all commands without `/`. Slash commands work regardless of this setting. 
 
-Usage:
+### Usage
 
 `/config prefix [prefix]`
 
-Arguments:
+### Arguments
 
 - `[prefix (string)]`: The prefix string, such as `.` or `ac.`.
 
@@ -20,10 +20,10 @@ Default value: `?`
 
 Reset a config option to its default value.
 
-Usage:
+### Usage
 
 `/config reset [option]`
 
-Arguments:
+### Arguments
 
 - `[option (string)]`: The `/config` option to be reset (such as "prefix").
