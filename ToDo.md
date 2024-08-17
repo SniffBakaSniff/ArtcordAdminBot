@@ -7,34 +7,35 @@
 
 1. ❌**Ban/Kick/Mute System**
    - Commands:
-     - ❌`/ban [user] [reason] <screenshot>`
-     - ❌`/unban [user] [reason]`
-     - ❌`/mute [user] <reason>`
+     - ❌`/ban [user] <reason> <referenceImage> <referenceMessage>`
+     - ❌`/unban [user] <reason>`
+     - ❌`/mute [user] <reason> <referenceImage> <referenceMessage>`
      - ❌`/unmute [user] <reason>`
-     - ❌`/tempmute [user] [duration] <reason>`
+     - ❌`/timeout [user] [duration] <reason> <referenceImage> <referenceMessage>`
      - ❌`/kick [user] <reason>`
-   - Include options for providing reasons and optional reference (screenshot).
+   - Include options for providing reasons and optional reference (screenshot and/or message link).
    - Display information on how to appeal actions.
    
 2. ❌**Warn System**
    - Commands:
-     - ❌`/warn [user] <severity:0-3 = 0> [reason]`
-     - ❌`/unwarn [user] <severity: 0-3> <reason>`
+     - ❌`/warn [user] [reason] <severity:0~3 = 1> <notifyUser = true>`
+     - ❌`/dewarn [user] <reason> <severity:0~3 = 1> <notifyUser = true>`
    - Severity weighting system (0-3) to track and escalate warnings.
    - Notify staff if a user surpasses a certain threshold of weighted points.
 
 3. ❌**Purge Messages**
    - Commands:
      - ✅`/purge [number of messages]`
-     - ❌`/purgeuntil [message link, inclusive]`
+     - ❌`/purge until [message link, inclusive]`
     - [Documentation](Documentation/Commands/purge.md)
 
 4. ❌**Lock System**
    - Commands:
      - ❌`/lock [channel] [time]`
-     - ❌`/lock server (all channels)`
+     - ❌`/lock all (all channels)`
      - ❌`/unlock [channel]`
-     - ❌`/unlock server (all channels)`
+     - ❌`/unlock all (all channels)`
+   - It should additionally be possible to force manual verification of users in times when raids are likely.
 
 5. ❌**Mass Actions & Alias System**
    - Create aliases for executing multiple commands at once.
@@ -75,7 +76,7 @@
 
 11. ❌**Command Configuration**
     - Set command prefixes:
-      - ❌`/config commands prefix [prefix:string]`
+      - ❌`/config commands prefixes [prefixes:string[]]`
     - Enable/disable commands:
       - ❌`/config commands enabled [command:string]`
     - Set required roles for commands:
@@ -90,9 +91,12 @@
       - ❌`/config rolegroup remove [rolegroup:string] [roles:string]`
       - ❌`/config rolegroup clear [rolegroup:string]`
 
-13. ❌**Ping Role Protection(I dont really understand this)**
-    - Implement a system where self-assignable ping roles are unpingable.
-    - Allow users to ping proxy roles that can trigger real pings under certain conditions (e.g., cooldowns).
+13. ❌**Ping Role Protection**
+    - To prevent users from spamming the ping roles and pinging them in wrong channels, the following can be done:
+      - Make the existing ping-roles that users can self-assign unpingable.
+      - Create pingable roles that have the same name as the actual unpingable one, that users can ping.
+      - Since users are pinging the "fake" roles instead of the actual roles, nobody will get pinged initially.
+      - Detect if a user has tried to ping the roles, and if certain conditions are met (eg. cooldown, correct channel, user didn't just join) the bot writes a message that pings the actual role.
 
 ### ❌**Ticket System**
 
@@ -106,5 +110,7 @@
 
 ### **Additional Features**
 
-- **Logs and Data Storage**: Store logs for command executions, moderation actions, and member activity. This will allow for lookup and analysis through a web interface.
-- **Account Age Tracking**: Notify staff when new accounts (less than a week or a month old) join the server.
+- **Logs and Data Storage**: Store logs for command executions, moderation actions, and member activity. This will allow for lookup and analysis through a web interface. The configuration should also be stored and be possible to edit in a web interface.
+- **Account Age Tracking**: Notify staff when new accounts (less than a week or a month old, should be configurable) join the server.
+
+*Everything should work regardless of what server or how many servers the bot is in, so it's important to store the guild ID with everything that gets stored in the database.*
