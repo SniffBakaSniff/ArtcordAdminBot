@@ -3,7 +3,10 @@ using System.Threading.Channels;
 
 namespace ArtcordAdminBot.Features.Helpers
 {
-    public class MessageHelpers
+    /// <summary>
+    /// Presets for embed response messages
+    /// </summary>
+    public static class MessageHelpers
     {
         public static DiscordEmbed GenericSuccessEmbed(string title, string message) =>
             GenericEmbed(title, message, "#20c020");
