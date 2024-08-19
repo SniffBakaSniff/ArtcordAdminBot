@@ -56,7 +56,7 @@ namespace ArtcordAdminBot.Features
                 }
                 else
                 {
-                    await foreach (var message in context.Channel.GetMessagesAfterAsync(ConversionHelpers.GetMessageId(afterMessage, context)))
+                    await foreach (var message in context.Channel.GetMessagesAfterAsync(ConversionHelpers.GetMessageId(afterMessage, nameof(afterMessage), context)))
                     {
                         messages.Add(message);
                     }
@@ -70,7 +70,7 @@ namespace ArtcordAdminBot.Features
                 else
                 {
                     await context.RespondAsync(
-                        MessageHelpers.GenericErrorEmbed("No messages to delete")
+                        MessageHelpers.GenericErrorEmbed("No messages to delete.")
                         );
                 }
 
@@ -80,10 +80,16 @@ namespace ArtcordAdminBot.Features
                     );
                 return;
             }
+            catch (ConversionHelpers.Exception ex)
+            {
+                await context.RespondAsync(
+                    ex.ToEmbed()
+                );
+            }
             catch (Exception ex)
             {
                 await context.RespondAsync(
-                    MessageHelpers.GenericErrorEmbed($"An error occurred while purging messages: {ex.Message}")
+                    MessageHelpers.GenericErrorEmbed($"An error occurred while purging messages:\n>{ex.Message}")
                 );
             }
         }
