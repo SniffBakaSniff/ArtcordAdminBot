@@ -20,7 +20,7 @@ namespace ArtcordAdminBot.Features
             try
             {
                 // Ensure the count is within range
-                if (amount <= 1 || amount > 250)
+                if (amount < 1 || amount > 250)
                 {
                     await context.RespondAsync(
                         MessageHelpers.GenericErrorEmbed("A number from **1** to **250** must be provided for the parameter `amount`.")
