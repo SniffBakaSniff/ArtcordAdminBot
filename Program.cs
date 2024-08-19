@@ -50,7 +50,7 @@ namespace ArtcordAdminBot
             DiscordActivity status = new("with fire", DiscordActivityType.Playing);
 
             // Now we connect and log in.
-            await client.ConnectAsync(status, DiscordUserStatus.Online);
+            await client.ConnectAsync(status, DiscordUserStatus.DoNotDisturb);
 
             // And now we wait infinitely so that our bot actually stays connected.
             await Task.Delay(-1);
