@@ -89,7 +89,7 @@ namespace ArtcordAdminBot.Features
             catch (Exception ex)
             {
                 await context.RespondAsync(
-                    MessageHelpers.GenericErrorEmbed($"An error occurred while purging messages:\n>{ex.Message}")
+                    MessageHelpers.GenericErrorEmbed($"An error occurred while purging messages:\n> {ex.Message}")
                 );
             }
         }
