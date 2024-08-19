@@ -35,14 +35,18 @@ namespace ArtcordAdminBot
 
                     // Add text commands with a custom prefix (?ping)
                     extension.AddProcessors(textCommandProcessor);
+
+                    extension.CommandErrored += EventHandlers.CommandErrored;
                 },
                 new CommandsConfiguration()
                 {
                     DebugGuildId = 1219490918235901962,
                     // The default value, however it's shown here for clarity
-                    RegisterDefaultCommandProcessors = true
+                    RegisterDefaultCommandProcessors = true,
+                    UseDefaultCommandErrorHandler = false
                 }
             );
+
 
             DiscordClient client = builder.Build();
 
