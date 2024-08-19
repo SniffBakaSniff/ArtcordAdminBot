@@ -9,33 +9,18 @@ using ArtcordAdminBot.Features.Helpers;
 
 namespace ArtcordAdminBot.Features
 {
+    [Command("purge")]
     public class PurgeCommand
     {
-        [Command("purge")]
-        [System.ComponentModel.Description("Purges a specified number of messages or until a certain message is reached from the channel.")]
-        public static async Task PurgeAsync(CommandContext context, 
-            [System.ComponentModel.Description("The amount of messages to purge from the channel (1 to 250, default 10)")] int amount = -1,
-            [System.ComponentModel.Description("The message link or ID to delete after. It itself will not get deleted.")] string? afterMessage = null)
+        [Command("amount")]
+        [System.ComponentModel.Description("Purges a specified number of messages reached from the channel.")]
+        public static async Task PurgeAmountAsync(CommandContext context, 
+            [System.ComponentModel.Description("The amount of messages to purge from the channel. (1 to 250, default 10)")] int amount = 10)
         {
             try
             {
-                bool useAmount = string.IsNullOrEmpty(afterMessage);
-
-                if (useAmount)
-                {
-                    if (amount == -1)
-                        amount = 10;
-                }
-                else if (amount != -1)
-                {
-                    await context.RespondAsync(
-                        MessageHelpers.GenericErrorEmbed("Argument `amount` cannot be provided if `untilMessage` is provided.")
-                        );
-                    return;
-                }
-
                 // Ensure the count is within range
-                if (useAmount && (amount <= 1 || amount > 250))
+                if (amount <= 1 || amount > 250)
                 {
                     await context.RespondAsync(
                         MessageHelpers.GenericErrorEmbed("A number from **1** to **250** must be provided for the parameter `amount`.")
@@ -45,40 +30,13 @@ namespace ArtcordAdminBot.Features
 
                 // Collect messages into a list
                 var messages = new List<DiscordMessage>();
-                var cancellationToken = CancellationToken.None;
 
-                if (useAmount)
+                await foreach (var message in context.Channel.GetMessagesAsync(amount, CancellationToken.None))
                 {
-                    await foreach (var message in context.Channel.GetMessagesAsync(amount, cancellationToken))
-                    {
-                        messages.Add(message);
-                    }
-                }
-                else
-                {
-                    await foreach (var message in context.Channel.GetMessagesAfterAsync(ConversionHelpers.GetMessageId(afterMessage, nameof(afterMessage), context)))
-                    {
-                        messages.Add(message);
-                    }
+                    messages.Add(message);
                 }
 
-                // Bulk delete messages
-                if (messages.Count > 0)
-                {
-                    await context.Channel.DeleteMessagesAsync(messages);
-                }
-                else
-                {
-                    await context.RespondAsync(
-                        MessageHelpers.GenericErrorEmbed("No messages to delete.")
-                        );
-                }
-
-                // Send a confirmation embed
-                await context.RespondAsync(
-                        MessageHelpers.GenericSuccessEmbed("Purge complete!", $"Successfully deleted {messages.Count} message{(messages.Count == 1 ? "" : "s")}.")
-                    );
-                return;
+                await RemoveMessagesAndRespondAsync(context, messages);
             }
             catch (ConversionHelpers.Exception ex)
             {
@@ -92,6 +50,49 @@ namespace ArtcordAdminBot.Features
                     MessageHelpers.GenericErrorEmbed($"An error occurred while purging messages:\n> {ex.Message}")
                 );
             }
+        }
+
+        [Command("until")]
+        [System.ComponentModel.Description("Purges until a certain message is reached from the channel.")]
+        public static async Task PurgeUntilAsync(CommandContext context,
+            [System.ComponentModel.Description("The message link or ID to delete until.")] string untilMessage,
+            [System.ComponentModel.Description("Whether or not to delete the provided message as well. (default False)")] bool inclusive = false)
+        {
+            // Collect messages into a list
+            var messages = new List<DiscordMessage>();
+
+            ulong messageId = ConversionHelpers.GetMessageId(untilMessage, nameof(untilMessage), context);
+
+            await foreach (var message in context.Channel.GetMessagesAfterAsync(messageId))
+            {
+                messages.Add(message);
+            }
+            if (inclusive) 
+            {
+                messages.Add(await context.Channel.GetMessageAsync(messageId));
+            }
+
+            await RemoveMessagesAndRespondAsync(context, messages);
+        }
+
+        private static async Task RemoveMessagesAndRespondAsync(CommandContext context, List<DiscordMessage> messages)
+        {
+            // Bulk delete messages
+            if (messages.Count > 0)
+            {
+                await context.Channel.DeleteMessagesAsync(messages);
+            }
+            else
+            {
+                await context.RespondAsync(
+                    MessageHelpers.GenericErrorEmbed("No messages to delete.")
+                    );
+                return;
+            }
+
+            await context.RespondAsync(
+                    MessageHelpers.GenericSuccessEmbed("Purge complete!", $"Successfully deleted {messages.Count} message{(messages.Count == 1 ? "" : "s")}.")
+                );
         }
     }
 }
