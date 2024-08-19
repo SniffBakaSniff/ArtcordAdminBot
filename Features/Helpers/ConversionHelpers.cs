@@ -1,6 +1,7 @@
 ﻿using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ArtcordAdminBot.Features.Helpers
 {
@@ -42,34 +43,51 @@ namespace ArtcordAdminBot.Features.Helpers
         }
 
         /// <summary>
-        /// Converts a message link or ID into the ID
+        /// Converts a message link or ID into the DiscordMessage
         /// </summary>
-        public static ulong GetMessageId(string s, string argumentName, CommandContext context)
+        public static async Task<DiscordMessage> GetMessage(string s, string argumentName, CommandContext context)
         {
-            if (ulong.TryParse(s, out ulong messageId))
+            ulong guildId, channelId, messageId;
+
+            guildId = context.Guild.Id;
+
+            // TODO: Make this work with providing a channel as well (once channel parsing is done),
+            // with a syntax like: `[channel]:[message]` where [channel] is the parsed channel (id or link) and [message] is the message id, whitespace shouldn't matter
+            if (ulong.TryParse(s, out ulong messageIdOut))
             {
-                return messageId;
+                messageId = messageIdOut;
+                channelId = context.Channel.Id;
+            }
+            else
+            {
+                // Regex to match the URL
+                var regex = new Regex(@"^https:\/\/discord\.com\/channels\/(\d+)\/(\d+)\/(\d+)$");
+                var match = regex.Match(s);
+                if (!match.Success || match.Groups.Count != 4)
+                {
+                    throw new Exception(null, argumentName, Type.Message);
+                }
+
+                // Extract and convert the IDs
+                if (ulong.Parse(match.Groups[1].Value) != guildId)
+                {
+                    throw new Exception("Can only use messages of current server.", argumentName, Type.Message);
+                }
+                channelId = ulong.Parse(match.Groups[2].Value);
+                messageId = ulong.Parse(match.Groups[3].Value);
             }
 
-            string tryString = $"https://discord.com/channels/{context.Guild.Id}/{context.Channel.Id}/";
-            if (s.StartsWith(tryString))
+            try
             {
-                return GetMessageId(s.Substring(tryString.Length), argumentName, context);
-            }
+                DiscordChannel channel = context.Channel.Id == channelId ? context.Channel : await context.Guild.GetChannelAsync(channelId);
+                DiscordMessage message = await channel.GetMessageAsync(messageId);
 
-            // Just for better error messages
-            tryString = $"https://discord.com/channels/{context.Guild.Id}/";
-            if (s.StartsWith(tryString))
-            {
-                throw new Exception($"The message must be of the same channel ({context.Channel.Mention}).", argumentName, Type.Message);
+                return message;
             }
-            tryString = $"https://discord.com/channels/";
-            if (s.StartsWith(tryString))
+            catch (DSharpPlus.Exceptions.NotFoundException ex)
             {
-                throw new Exception($"The message must be of the same server and channel.", argumentName, Type.Message);
+                throw new Exception("Message not found.", argumentName, Type.Message);
             }
-
-            throw new Exception(null, argumentName, Type.Message);
         }
     }
 }
