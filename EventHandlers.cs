@@ -9,7 +9,7 @@ namespace ArtcordAdminBot
     {
         public static async Task CommandErrored(CommandsExtension s, CommandErroredEventArgs e)
         {
-            await e.Context.RespondAsync(MessageHelpers.GenericErrorEmbed($"**{e.Exception.GetType().Name}**\n> {e.Exception.Message}"));
+            await e.Context.RespondAsync(MessageHelpers.GenericErrorEmbed($"**{e.Exception.GetType().Name}**\n> {e.Exception.Message}", title: "Error (D#+)"));
         }
     }
 }

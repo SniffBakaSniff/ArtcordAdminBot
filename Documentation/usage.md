@@ -33,7 +33,7 @@ Data types are put after the argument name, such as `[myArg (string)]`, and can 
 - `user`: A username (not display name!), ID or ping, such as `wumpus`, `@wumpus`, `123456789123456789`, or `<@123456789123456789>` (which is what Discord does by default if you type @ and the user).
 - `channel`: A channel ID, link or reference, such as `1234567890123456789`, `https://discord.com/channels/9876543210987654321/1234567890123456789`, or `<#1234567890123456789>` (which is what Discord does by default if you type # and the channel name).
 - `role`: A role ID, name or reference, such as `1234567890123456789`, `my role` (name must be exact, but it's not case-sensitive), or `<@&1234567890123456789>` (which is what Discord does by default if you type @ and the role).
-- `message`: A message ID or link, such as `123123123123123123` or `https://discord.com/channels/9876543210987654321/1234567890123456789/123123123123123123`. For technical reasons, the message must be in the same and channel as the command is run in, unless a separate channel argument is provided. 
+- `message`: A message ID or link, such as `123123123123123123` or `https://discord.com/channels/9876543210987654321/1234567890123456789/123123123123123123`.
 
 #### Lists
 
