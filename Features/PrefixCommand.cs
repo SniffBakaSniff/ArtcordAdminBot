@@ -26,10 +26,16 @@ namespace ArtcordAdminBot.Features
                 return;
             }
 
+            if (newPrefix.Length > 3) { 
+                await ctx.RespondAsync("Prefix cannot be longer than 3 characters.");
+                return;
+            }
+
+            newPrefix = newPrefix.ToLower();
             await _databaseService.SetPrefixAsync(ctx.Guild.Id, newPrefix);
 
             await ctx.RespondAsync(
-                MessageHelpers.GenericEmbed("",$"Prefix successfully updated to `{newPrefix}`.", "#00ffff")
+                MessageHelpers.GenericSuccessEmbed("Prefix updated", $"Prefix successfully updated to `{newPrefix}`.")
             );
         }
     }

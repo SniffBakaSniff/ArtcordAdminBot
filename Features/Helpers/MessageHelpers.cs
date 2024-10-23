@@ -9,7 +9,7 @@ namespace ArtcordAdminBot.Features.Helpers
     public static class MessageHelpers
     {
         public static DiscordEmbed GenericSuccessEmbed(string title, string message) =>
-            GenericEmbed(title, message, "#20c020");
+            GenericEmbed(title, message, "#00ffff"); //I Like AQUA
 
         public static DiscordEmbed GenericErrorEmbed(string message, string title = "Error") =>
             GenericEmbed(title, message, "#ff0000");
