@@ -17,7 +17,7 @@ namespace ArtcordAdminBot.Features
 
         [Command("setprefix")]
         [System.ComponentModel.Description("Set the bot's prefix")]
-        //[RequirePermissions(DiscordPermissions.Administrator)]
+        [RequirePermissions(DiscordPermissions.Administrator)]
         public async Task SetPrefixAsync(CommandContext ctx, string newPrefix)
         {
             if (string.IsNullOrWhiteSpace(newPrefix))
