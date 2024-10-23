@@ -25,7 +25,7 @@ namespace ArtcordAdminBot
                 .CreateDefault(discordToken, TextCommandProcessor.RequiredIntents | SlashCommandProcessor.RequiredIntents | DiscordIntents.MessageContents)
                 .ConfigureServices(services => 
                 {
-                    services.AddDbContext<BotDbContext>(options => options.UseSqlite("Data Source=database.db"));
+                    services.AddDbContext<BotDbContext>();
                     services.AddScoped<IPrefixResolver, CustomPrefixResolver>();
                     services.AddScoped<IDatabaseService, DatabaseService>();
                 });
