@@ -66,7 +66,7 @@ namespace ArtcordAdminBot.Features
             {
                 Title = "User Banned",
                 Color = DiscordColor.Red,
-                Description = $"**User:** {targetUser.Username}#{targetUser.Discriminator}\n" +
+                Description = $"**User:** {targetUser.Username}\n" +
                               $"**Reason:** {reason}\n" +
                               $"**Moderator:** {ctx.User.Username}",
                 Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
