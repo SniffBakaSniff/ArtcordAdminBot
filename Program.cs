@@ -36,7 +36,7 @@ namespace ArtcordAdminBot
                 // we register our commands here
                 extension =>
                 {
-                    extension.AddCommands([typeof(EchoCommand), typeof(PurgeCommand), typeof(PrefixCommand), typeof(PingCommand)]);
+                    extension.AddCommands([typeof(EchoCommand), typeof(PurgeCommand), typeof(PrefixCommand), typeof(PingCommand), typeof(BanCommand)]);
                     TextCommandProcessor textCommandProcessor = new(new TextCommandConfiguration
                     {
                        // PrefixResolver = new DefaultPrefixResolver(true, "?", ".").ResolvePrefixAsync
