@@ -21,7 +21,13 @@ namespace ArtcordAdminBot.Features
 
         [Command("ban")]
         [RequirePermissions(DiscordPermissions.BanMembers)]
-        public async Task BanAsync(CommandContext ctx, DiscordUser targetUser, string reason = "No reason provided", DiscordAttachment? attachment = null, ulong? referenceMessageId = null, string additionalNotes = "None", bool deleteMessages = false)
+        public async Task BanAsync(CommandContext ctx, 
+        [System.ComponentModel.Description("The user to ban.")]DiscordUser targetUser, 
+        [System.ComponentModel.Description("The reason for the ban.")] string reason = "No reason provided", 
+        [System.ComponentModel.Description("The attachment of the reference image.")] DiscordAttachment? attachment = null, 
+        [System.ComponentModel.Description("The ID of the reference message.")] ulong? referenceMessageId = null, 
+        [System.ComponentModel.Description("Additional notes about the ban.")]string additionalNotes = "None", 
+        [System.ComponentModel.Description("Whether or not to delete the users messages from the last 7 days")] bool deleteMessages = false)
         {
             var time = TimeSpan.FromDays(7);
             
