@@ -20,23 +20,21 @@ namespace ArtcordAdminBot.Features
         }
 
         [Command("ban")]
-        [RequirePermissions(DiscordPermissions.BanMembers)]
+        [RequirePermissions(DiscordPermissions.BanMembers)] // Placeholder till we have a custom permission handler
         public async Task BanAsync(CommandContext ctx, 
         [System.ComponentModel.Description("The user to ban.")]DiscordUser targetUser, 
-        [System.ComponentModel.Description("The reason for the ban.")] string reason = "No reason provided", 
+        [System.ComponentModel.Description("The reason for the ban.")] string? reason = null, 
         [System.ComponentModel.Description("The attachment of the reference image.")] DiscordAttachment? attachment = null, 
         [System.ComponentModel.Description("The ID of the reference message.")] ulong? referenceMessageId = null, 
-        [System.ComponentModel.Description("Additional notes about the ban.")]string additionalNotes = "None", 
-        [System.ComponentModel.Description("Whether or not to delete the users messages from the last 7 days")] bool deleteMessages = false)
+        [System.ComponentModel.Description("Additional notes about the ban.")]string? internalNotes = null, 
+        [System.ComponentModel.Description("Choose the timeframe for deleting user messages.")] MessageDeletionTimeframe deleteTimeframe = MessageDeletionTimeframe.None)
         {
-            var time = TimeSpan.FromDays(7);
-            
             // Attachment processing
-            string referenceImagePath = "None";
+            string? referenceImagePath = null;
             if (attachment != null)
             {
                 // Download and save the image
-                string fileName = $"ban_reference_{targetUser.Id}_{DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss")}.png";
+                string fileName = $"ban_reference_{ctx.Guild!.Id}_{targetUser.Id}_{DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss.fff")}.png";
                 string filePath = Path.Combine("Images", fileName);
                 
                 Directory.CreateDirectory("Images");
@@ -52,21 +50,16 @@ namespace ArtcordAdminBot.Features
 
             // Create the ban record in the database
             await _databaseService.NewBanRecordAsync(
-                guildId: ctx.Guild.Id,
+                guildId: ctx.Guild!.Id,
                 userId: targetUser.Id,
                 moderatorId: ctx.User.Id,
                 reason: reason,
                 referenceImagePath: referenceImagePath,
                 referenceMessageId: referenceMessageId,
-                additionalNotes: additionalNotes
+                internalNotes: internalNotes
             );
 
-            if (!deleteMessages)
-            {
-                time = TimeSpan.FromDays(0);
-            }
-
-            await ctx.Guild.BanMemberAsync(targetUser, time, reason);
+            await ctx.Guild.BanMemberAsync(targetUser, TimeSpan.FromDays((int)deleteTimeframe), reason);
 
             var embed = new DiscordEmbedBuilder
             {

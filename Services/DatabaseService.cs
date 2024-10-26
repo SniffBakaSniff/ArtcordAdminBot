@@ -5,16 +5,16 @@ public interface IDatabaseService
     Task<string> GetPrefixAsync(ulong guildId);
     Task SetPrefixAsync(ulong guildId, string prefix);
     Task NewBanRecordAsync(
-        ulong guildId, 
-        ulong userId, 
-        ulong moderatorId, 
-        string reason, 
-        string referenceImagePath = "None", 
-        ulong? referenceMessageId = null, 
-        DateTime? expirationDate = null, 
-        string appealStatus = "None", 
-        DateTime? appealDate = null, 
-        string additionalNotes = "None");
+        ulong guildId,
+        ulong userId,
+        ulong moderatorId,
+        string? reason,
+        string? referenceImagePath = null,
+        ulong? referenceMessageId = null,
+        DateTime? expirationDate = null,
+        AppealStatus? appealStatus = null,
+        DateTime? appealDate = null,
+        string? internalNotes = null);
 }
 
 public class DatabaseService : IDatabaseService
@@ -51,16 +51,16 @@ public class DatabaseService : IDatabaseService
     }
 
     public async Task NewBanRecordAsync(
-        ulong guildId, 
-        ulong userId, 
-        ulong moderatorId, 
-        string reason, 
-        string referenceImagePath = "None",
-        ulong? referenceMessageId = null, 
-        DateTime? expirationDate = null, 
-        string appealStatus = "None", 
-        DateTime? appealDate = null, 
-        string additionalNotes = "None")
+        ulong guildId,
+        ulong userId,
+        ulong moderatorId,
+        string? reason,
+        string? referenceImagePath = null,
+        ulong? referenceMessageId = null,
+        DateTime? expirationDate = null,
+        AppealStatus? appealStatus = null,
+        DateTime? appealDate = null,
+        string? internalNotes = null)
     {
         using (var dbContext = new BotDbContext())
         {
@@ -76,7 +76,7 @@ public class DatabaseService : IDatabaseService
                 ExpirationDate = expirationDate,
                 AppealStatus = appealStatus,
                 AppealDate = appealDate,
-                AdditionalNotes = additionalNotes
+                InternalNotes = internalNotes
             };
 
             dbContext.BanRecords.Add(newBanRecord);
