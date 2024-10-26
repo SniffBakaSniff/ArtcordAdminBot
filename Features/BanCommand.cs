@@ -59,7 +59,7 @@ namespace ArtcordAdminBot.Features
                 internalNotes: internalNotes
             );
 
-            await ctx.Guild.BanMemberAsync(targetUser, TimeSpan.FromDays((int)deleteTimeframe), reason);
+            await ctx.Guild.BanMemberAsync(targetUser, TimeSpan.FromHours((int)deleteTimeframe), reason);
 
             var embed = new DiscordEmbedBuilder
             {
