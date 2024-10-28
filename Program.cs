@@ -6,7 +6,7 @@ using DSharpPlus.Commands.Processors.SlashCommands;
 using ArtcordAdminBot.Features;
 using DSharpPlus.Commands.Processors.TextCommands.Parsing;
 using ArtcordAdminBot.Features.ConfigCommands;
-using ArtcordAdminBot.Features.AdminCommands;
+using ArtcordAdminBot.Features.ModerationCommands;
 
 namespace ArtcordAdminBot
 {
@@ -36,7 +36,7 @@ namespace ArtcordAdminBot
                 // we register our commands here
                 extension =>
                 {
-                    extension.AddCommands([typeof(EchoCommand), typeof(PingCommand), typeof(ConfigCommandsGroup), typeof(AdminCommandGroup)]);
+                    extension.AddCommands([typeof(EchoCommand), typeof(PingCommand), typeof(ConfigCommandsGroup), typeof(ModerationCommandGroup)]);
                     TextCommandProcessor textCommandProcessor = new(new TextCommandConfiguration
                     {
                        // PrefixResolver = new DefaultPrefixResolver(true, "?", ".").ResolvePrefixAsync

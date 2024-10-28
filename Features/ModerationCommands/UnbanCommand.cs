@@ -3,9 +3,9 @@ using DSharpPlus.Entities;
 using DSharpPlus.Commands.ContextChecks;
 using ArtcordAdminBot.Features.Helpers;
 
-namespace ArtcordAdminBot.Features.AdminCommands
+namespace ArtcordAdminBot.Features.ModerationCommands
 {
-    public partial class AdminCommandGroup
+    public partial class ModerationCommandGroup
     {
         
 
@@ -23,7 +23,7 @@ namespace ArtcordAdminBot.Features.AdminCommands
 
             var embed = new DiscordEmbedBuilder
             {
-                Title = "User UnBanned",
+                Title = "User Unbanned",
                 Color = DiscordColor.Cyan,
                 Description = $"**User:** {targetUser}\n" +
                               $"**Reason:** {reason}\n" +

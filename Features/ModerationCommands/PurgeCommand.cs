@@ -2,10 +2,10 @@ using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using ArtcordAdminBot.Features.Helpers;
 
-namespace ArtcordAdminBot.Features.AdminCommands
+namespace ArtcordAdminBot.Features.ModerationCommands
 {
 
-    public partial class AdminCommandGroup {
+    public partial class ModerationCommandGroup {
     [Command("purge")]
     public class PurgeCommand
     {

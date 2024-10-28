@@ -2,16 +2,16 @@ using ArtcordAdminBot.Features.Helpers;
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 
-namespace ArtcordAdminBot.Features.AdminCommands
+namespace ArtcordAdminBot.Features.ModerationCommands
 {
-    public partial class AdminCommandGroup
+    public partial class ModerationCommandGroup
     {
         [Command("mute")]
         [System.ComponentModel.Description("Mutes a user")]
         public async Task MuteAsync(CommandContext ctx,
         [System.ComponentModel.Description("The user to mute.")] DiscordUser targetUser)
         {
-            var mutedRoleId = await _databaseService.GetMutedRoleAsync(ctx.Guild!.Id);
+            ulong? mutedRoleId = await _databaseService.GetMutedRoleAsync(ctx.Guild!.Id);
             if (mutedRoleId == null)
             {
                 await ctx.RespondAsync(MessageHelpers.GenericErrorEmbed("Muted role not set. Please configure the muted role with `/config setmutedrole`."));
@@ -29,6 +29,7 @@ namespace ArtcordAdminBot.Features.AdminCommands
             await targetMember.GrantRoleAsync(mutedRole);
 
             await ctx.RespondAsync(MessageHelpers.GenericSuccessEmbed($"User Muted", $"{targetUser.Mention} has been muted."));
+            await targetUser.SendMessageAsync(MessageHelpers.GenericErrorEmbed("You have been muted", $"You have been muted from {ctx.Guild.Name}."));
         }
     }
 }

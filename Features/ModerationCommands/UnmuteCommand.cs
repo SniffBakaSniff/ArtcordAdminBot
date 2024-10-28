@@ -2,9 +2,9 @@ using ArtcordAdminBot.Features.Helpers;
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 
-namespace ArtcordAdminBot.Features.AdminCommands
+namespace ArtcordAdminBot.Features.ModerationCommands
 {
-    public partial class AdminCommandGroup
+    public partial class ModerationCommandGroup
     {
         [Command("unmute")]
         [System.ComponentModel.Description("Unmutes a user")]
@@ -29,6 +29,7 @@ namespace ArtcordAdminBot.Features.AdminCommands
             await targetMember.RevokeRoleAsync(mutedRole);
 
             await ctx.RespondAsync(MessageHelpers.GenericSuccessEmbed($"User Unmuted", $"{targetUser.Mention} has been unmuted."));
+            await targetUser.SendMessageAsync(MessageHelpers.GenericSuccessEmbed("You have been unmuted", $"You have been unmuted from {ctx.Guild.Name}."));
         }
     }
 }
