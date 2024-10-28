@@ -6,22 +6,16 @@ using System.IO;
 using System.Net.Http;
 using System.Text.Json.Serialization;
 
-namespace ArtcordAdminBot.Features
+namespace ArtcordAdminBot.Features.AdminCommands
 {
-    public class BanCommand
+    public partial class AdminCommandGroup
     {
-        private readonly IDatabaseService _databaseService;
         private readonly HttpClient _httpClient;
 
-        public BanCommand(IDatabaseService databaseService)
-        {
-            _databaseService = databaseService;
-            _httpClient = new HttpClient();
-        }
 
         [Command("ban")]
         [RequirePermissions(DiscordPermissions.BanMembers)] // Placeholder till we have a custom permission handler
-        public async Task BanAsync(CommandContext ctx, 
+        public async Task BanAsync(CommandContext ctx,
         [System.ComponentModel.Description("The user to ban.")]DiscordUser targetUser, 
         [System.ComponentModel.Description("The reason for the ban.")] string? reason = null, 
         [System.ComponentModel.Description("The attachment of the reference image.")] DiscordAttachment? attachment = null, 
@@ -77,6 +71,7 @@ namespace ArtcordAdminBot.Features
 
 
             await ctx.RespondAsync(embed: embed.Build());
+            await targetUser.SendMessageAsync(embed: embed.Build());
         }
     }
 }
