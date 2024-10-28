@@ -4,7 +4,7 @@ using DSharpPlus.Entities;
 
 namespace ArtcordAdminBot.Features.ModerationCommands
 {
-    [Command("moderation")]
+    [Command("mod")]
     [RequirePermissions(DiscordPermissions.Administrator)] // Placeholder till custom permissions handler is in place
     public partial class ModerationCommandGroup
     {

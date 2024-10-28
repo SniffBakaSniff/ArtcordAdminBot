@@ -9,6 +9,7 @@ namespace ArtcordAdminBot.Features.ModerationCommands
     public partial class ModerationCommandGroup
     {
         private readonly HttpClient _httpClient;
+        
 
 
         [Command("ban")]
@@ -52,6 +53,8 @@ namespace ArtcordAdminBot.Features.ModerationCommands
                 internalNotes: internalNotes
             );
 
+            reason ??= "No reason provided.";
+
             await ctx.Guild.BanMemberAsync(targetUser, TimeSpan.FromHours((int)deleteTimeframe), reason);
 
             var embed = new DiscordEmbedBuilder
@@ -77,7 +80,7 @@ namespace ArtcordAdminBot.Features.ModerationCommands
                             $"**Appeals:** If you believe this ban was a mistake, please reach out to the moderation team for clarification.",
                 Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
                 {
-                    Url = targetUser.AvatarUrl
+                    Url = ctx.Guild.IconUrl
                 },
                 Timestamp = DateTime.UtcNow
             };
