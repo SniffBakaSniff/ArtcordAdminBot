@@ -1,6 +1,7 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using DSharpPlus.Interactivity.Extensions;
 
 namespace ArtcordAdminBot.Listeners
 {
@@ -8,6 +9,7 @@ namespace ArtcordAdminBot.Listeners
     {
 
         private readonly IDatabaseService _databaseService;
+
 
         public ButtonInteractionListener(IDatabaseService databaseService)
         {
@@ -36,7 +38,14 @@ namespace ArtcordAdminBot.Listeners
                     return;
                 }
 
-                await _databaseService.SetTicketClaimedStatusAsync(ticketId.Value, e.User.Id, true);
+                var member = await e.Guild.GetMemberAsync(e.User.Id);
+                if (!member.Permissions.HasPermission(DiscordPermissions.ManageMessages)) //!member.Roles.Any(role => role.id == ModeratorRoles)) Demo method for the custom Role Groups for Permission handling
+                                                                                          //Yes Ik this logic is incorrect and wouldnt work but its just a idea i had.
+                {
+                    await e.Interaction.CreateResponseAsync(DiscordInteractionResponseType.ChannelMessageWithSource,
+                        new DiscordInteractionResponseBuilder().WithContent("You do not have permission to claim this ticket.").AsEphemeral(true));
+                    return;
+                }
 
                 var originalMessage = await e.Channel.GetMessageAsync(e.Message.Id);
                 
@@ -60,13 +69,17 @@ namespace ArtcordAdminBot.Listeners
             else if (e.Id == "close_ticket")
             {
                 await e.Interaction.CreateResponseAsync(DiscordInteractionResponseType.ChannelMessageWithSource,
-                    new DiscordInteractionResponseBuilder().WithContent("This ticket is now closed."));
+                    new DiscordInteractionResponseBuilder().WithContent("Respond with *confirm* to continue."));
                 
-                var (ticketId, userId) = await _databaseService.GetTicketIdForChannelAsync(e.Channel.Id);
+                var result = await e.Channel.GetNextMessageAsync(m =>
+                {
+                    return m.Content.ToLower() == "confirm";
+                });
 
-                await _databaseService.closeTicketAsync(ticketId: ticketId!.Value);
-                await e.Channel.DeleteAsync();
+                if (!result.TimedOut) await e.Channel.DeleteAsync();
             }
+
+
 
             else if (e.Id == "appeal_ban")
             {

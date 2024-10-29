@@ -9,6 +9,9 @@ using ArtcordAdminBot.Features.ConfigCommands;
 using ArtcordAdminBot.Features.ModerationCommands;
 using ArtcordAdminBot.Listeners;
 using System.Runtime.CompilerServices;
+using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Enums;
+using DSharpPlus.Interactivity.Extensions;
 
 namespace ArtcordAdminBot
 {
@@ -30,7 +33,13 @@ namespace ArtcordAdminBot
                     services.AddDbContext<BotDbContext>();
                     services.AddScoped<IPrefixResolver, CustomPrefixResolver>();
                     services.AddScoped<IDatabaseService, DatabaseService>();
-                });
+                })
+                .UseInteractivity(new InteractivityConfiguration
+                {
+                    PollBehaviour = PollBehaviour.KeepEmojis,
+                    Timeout = TimeSpan.FromMinutes(1)
+                });;
+
 
             var buttonInteractionHandler = new ButtonInteractionListener(new DatabaseService());
             var ticketMessageLogger = new TicketMessageLogger(new DatabaseService());
@@ -40,7 +49,6 @@ namespace ArtcordAdminBot
                 b.HandleComponentInteractionCreated(buttonInteractionHandler.HandleButtonInteraction);
                 b.HandleMessageCreated(ticketMessageLogger.LogTicketMessages);
             });
-
 
             // Use the commands extension
             builder.UseCommands
@@ -68,7 +76,6 @@ namespace ArtcordAdminBot
                     UseDefaultCommandErrorHandler = false
                 }
             );
-
 
             DiscordClient client = builder.Build();
 
