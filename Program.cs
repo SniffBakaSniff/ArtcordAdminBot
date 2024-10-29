@@ -7,6 +7,8 @@ using ArtcordAdminBot.Features;
 using DSharpPlus.Commands.Processors.TextCommands.Parsing;
 using ArtcordAdminBot.Features.ConfigCommands;
 using ArtcordAdminBot.Features.ModerationCommands;
+using ArtcordAdminBot.Listeners;
+using System.Runtime.CompilerServices;
 
 namespace ArtcordAdminBot
 {
@@ -30,19 +32,27 @@ namespace ArtcordAdminBot
                     services.AddScoped<IDatabaseService, DatabaseService>();
                 });
 
+            var buttonInteractionHandler = new ButtonInteractionListener(new DatabaseService());
+            var ticketMessageLogger = new TicketMessageLogger(new DatabaseService());
+
+            builder.ConfigureEventHandlers(b =>
+            {
+                b.HandleComponentInteractionCreated(buttonInteractionHandler.HandleButtonInteraction);
+                b.HandleMessageCreated(ticketMessageLogger.LogTicketMessages);
+            });
+
+
             // Use the commands extension
             builder.UseCommands
             (
                 // we register our commands here
                 extension =>
                 {
-                    extension.AddCommands([typeof(EchoCommand), typeof(PingCommand), typeof(ConfigCommandsGroup), typeof(ModerationCommandGroup)]);
+                    extension.AddCommands([typeof(EchoCommand), typeof(PingCommand), typeof(ConfigCommandsGroup), typeof(ModerationCommandGroup), typeof(TicketCommands)]);
                     TextCommandProcessor textCommandProcessor = new(new TextCommandConfiguration
                     {
                        // PrefixResolver = new DefaultPrefixResolver(true, "?", ".").ResolvePrefixAsync
                     });
-
-                    
 
                     // Add text commands with a custom prefix (?ping)
                     extension.AddProcessors(textCommandProcessor);

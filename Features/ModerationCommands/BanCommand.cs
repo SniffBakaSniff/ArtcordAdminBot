@@ -3,6 +3,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.Commands.ContextChecks;
 using DSharpPlus.EventArgs;
 using System.ComponentModel;
+using DSharpPlus;
 
 namespace ArtcordAdminBot.Features.ModerationCommands
 {
@@ -10,8 +11,6 @@ namespace ArtcordAdminBot.Features.ModerationCommands
     {
         private readonly HttpClient _httpClient;
         
-
-
         [Command("ban")]
         [RequirePermissions(DiscordPermissions.BanMembers)] 
         // Placeholder till we have a custom permission handler. Whenever we get a custom permission handler we can just handle permissions on a per group basis.
@@ -23,6 +22,9 @@ namespace ArtcordAdminBot.Features.ModerationCommands
         [Description("Additional notes about the ban.")]string? internalNotes = null, 
         [Description("Choose the timeframe for deleting user messages.")] MessageDeletionTimeframe deleteTimeframe = MessageDeletionTimeframe.None)
         {
+
+            var guildIconUrl = ctx.Guild!.IconUrl;
+
             // Attachment processing
             string? referenceImagePath = null;
             if (attachment != null)
@@ -55,7 +57,13 @@ namespace ArtcordAdminBot.Features.ModerationCommands
 
             reason ??= "No reason provided.";
 
-            await ctx.Guild.BanMemberAsync(targetUser, TimeSpan.FromHours((int)deleteTimeframe), reason);
+            //await ctx.Guild.BanMemberAsync(targetUser, TimeSpan.FromHours((int)deleteTimeframe), reason);
+
+            DateTime adjustedTime = DateTime.UtcNow.AddHours(-(int)deleteTimeframe);
+
+            string deletionTimeframeInfo = deleteTimeframe == MessageDeletionTimeframe.None
+                ? "No messages were deleted."
+                : $"Messages from {Formatter.Timestamp(adjustedTime, TimestampFormat.ShortDateTime)} to {Formatter.Timestamp(DateTime.UtcNow, TimestampFormat.ShortDateTime)} were deleted.";
 
             var embed = new DiscordEmbedBuilder
             {
@@ -63,7 +71,8 @@ namespace ArtcordAdminBot.Features.ModerationCommands
                 Color = DiscordColor.Red,
                 Description = $"**User:** {targetUser.Username}\n" +
                               $"**Reason:** {reason}\n" +
-                              $"**Moderator:** {ctx.User.Username}",
+                              $"**Moderator:** {ctx.User.Username}\n" +
+                              $"**Deleted Messages:** {deletionTimeframeInfo}",
                 Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
                 {
                     Url = targetUser.AvatarUrl
@@ -80,7 +89,7 @@ namespace ArtcordAdminBot.Features.ModerationCommands
                             $"**Appeals:** If you believe this ban was a mistake, please reach out to the moderation team for clarification.",
                 Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
                 {
-                    Url = ctx.Guild.IconUrl
+                    Url = guildIconUrl
                 },
                 Timestamp = DateTime.UtcNow
             };
