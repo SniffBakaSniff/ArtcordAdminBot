@@ -1,7 +1,6 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
-using DSharpPlus.Interactivity.Extensions;
 
 namespace ArtcordAdminBot.Listeners
 {
@@ -68,17 +67,22 @@ namespace ArtcordAdminBot.Listeners
 
             else if (e.Id == "close_ticket")
             {
-                await e.Interaction.CreateResponseAsync(DiscordInteractionResponseType.ChannelMessageWithSource,
-                    new DiscordInteractionResponseBuilder().WithContent("Respond with *confirm* to continue."));
-                
-                var result = await e.Channel.GetNextMessageAsync(m =>
+                var embed = new DiscordEmbedBuilder
                 {
-                    return m.Content.ToLower() == "confirm";
-                });
+                    Title = "Close Ticket",
+                    Description = "Are you sure you want to close this ticket?",
+                    Color = DiscordColor.Red // You can choose any color
+                }
+                .AddField("Action Required", "Click the button below to confirm the closure of this ticket.", true);
 
-                if (!result.TimedOut) await e.Channel.DeleteAsync();
+                await e.Interaction.CreateResponseAsync(DiscordInteractionResponseType.ChannelMessageWithSource,
+                    new DiscordInteractionResponseBuilder()
+                        .AddEmbed(embed.Build()) // Add the embed to the response
+                        .AddComponents(
+                            new DiscordButtonComponent(DiscordButtonStyle.Danger, "close_ticket_confirmation", "Confirm")
+                        )
+                        .AsEphemeral(true));
             }
-
 
 
             else if (e.Id == "appeal_ban")
@@ -87,8 +91,10 @@ namespace ArtcordAdminBot.Listeners
                     new DiscordInteractionResponseBuilder().WithContent("Appeal sent."));
 
             }
-            
+            else if (e.Id == "close_ticket_confirmation")
+            {
+                await e.Channel.DeleteAsync();
+            }
         }
-
     }
 }

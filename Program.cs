@@ -9,9 +9,6 @@ using ArtcordAdminBot.Features.ConfigCommands;
 using ArtcordAdminBot.Features.ModerationCommands;
 using ArtcordAdminBot.Listeners;
 using System.Runtime.CompilerServices;
-using DSharpPlus.Interactivity;
-using DSharpPlus.Interactivity.Enums;
-using DSharpPlus.Interactivity.Extensions;
 
 namespace ArtcordAdminBot
 {
@@ -33,12 +30,7 @@ namespace ArtcordAdminBot
                     services.AddDbContext<BotDbContext>();
                     services.AddScoped<IPrefixResolver, CustomPrefixResolver>();
                     services.AddScoped<IDatabaseService, DatabaseService>();
-                })
-                .UseInteractivity(new InteractivityConfiguration
-                {
-                    PollBehaviour = PollBehaviour.KeepEmojis,
-                    Timeout = TimeSpan.FromMinutes(1)
-                });;
+                });
 
 
             var buttonInteractionHandler = new ButtonInteractionListener(new DatabaseService());
