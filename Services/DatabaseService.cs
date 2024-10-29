@@ -4,6 +4,8 @@ public interface IDatabaseService
 {
     Task<string> GetPrefixAsync(ulong guildId);
     Task SetPrefixAsync(ulong guildId, string prefix);
+    Task<ulong?> GetMutedRoleAsync(ulong guildId);
+    Task SetMutedRoleAsync(ulong guildId, ulong? mutedRoleId);
     Task NewBanRecordAsync(
         ulong guildId,
         ulong userId,
@@ -19,7 +21,21 @@ public interface IDatabaseService
 
 public class DatabaseService : IDatabaseService
 {
-    // This is for getting the prefix
+
+    private async Task<GuildSettings> GuildSettingsAsync(BotDbContext dbContext, ulong guildId)
+    {
+        var settings = await dbContext.GuildSettings.FindAsync(guildId);
+
+        if (settings == null)
+        {
+            settings = new GuildSettings { GuildId = guildId };
+            dbContext.GuildSettings.Add(settings);
+        }
+
+        return settings;
+    }
+
+
     public async Task<string> GetPrefixAsync(ulong guildId)
     {
         using (var dbContext = new BotDbContext())
@@ -29,26 +45,35 @@ public class DatabaseService : IDatabaseService
         }
     }
 
-    // This is for changing the prefix
     public async Task SetPrefixAsync(ulong guildId, string prefix)
     {
         using (var dbContext = new BotDbContext())
         {
-            var settings = await dbContext.GuildSettings.FindAsync(guildId);
-
-            if (settings == null)
-            {
-                settings = new GuildSettings { GuildId = guildId, Prefix = prefix };
-                dbContext.GuildSettings.Add(settings);
-            }
-            else
-            {
-                settings.Prefix = prefix;
-            }
-
+            var settings = await GuildSettingsAsync(dbContext, guildId);
+            settings.Prefix = prefix;
             await dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task<ulong?> GetMutedRoleAsync(ulong guildId)
+    {
+        using (var dbContext = new BotDbContext())
+        {
+            var settings = await dbContext.GuildSettings.FindAsync(guildId);
+            return settings?.MutedRoleId;
+        }
+    }
+
+    public async Task SetMutedRoleAsync(ulong guildId, ulong? mutedRoleId)
+    {
+        using (var dbContext = new BotDbContext())
+        {
+            var settings = await GuildSettingsAsync(dbContext, guildId);
+            settings.MutedRoleId = mutedRoleId;
+            await dbContext.SaveChangesAsync();
+        }
+    }
+
 
     public async Task NewBanRecordAsync(
         ulong guildId,

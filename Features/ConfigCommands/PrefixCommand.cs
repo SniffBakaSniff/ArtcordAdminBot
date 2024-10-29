@@ -4,20 +4,13 @@ using DSharpPlus.Commands.ContextChecks;
 using ArtcordAdminBot.Features.Helpers;
 
 
-namespace ArtcordAdminBot.Features
+namespace ArtcordAdminBot.Features.ConfigCommands
 {
-    public class PrefixCommand
+    public partial class ConfigCommandsGroup
     {
-        private readonly IDatabaseService _databaseService;
-
-        public PrefixCommand(IDatabaseService databaseService)
-        {
-            _databaseService = databaseService;
-        }
 
         [Command("setprefix")]
         [System.ComponentModel.Description("Set the bot's prefix")]
-        [RequirePermissions(DiscordPermissions.Administrator)]
         public async Task SetPrefixAsync(CommandContext ctx, string newPrefix)
         {
             if (string.IsNullOrWhiteSpace(newPrefix))
@@ -32,7 +25,7 @@ namespace ArtcordAdminBot.Features
             }
 
             newPrefix = newPrefix.ToLower();
-            await _databaseService.SetPrefixAsync(ctx.Guild.Id, newPrefix);
+            await _databaseService.SetPrefixAsync(ctx.Guild!.Id, newPrefix);
 
             await ctx.RespondAsync(
                 MessageHelpers.GenericSuccessEmbed("Prefix updated", $"Prefix successfully updated to `{newPrefix}`.")

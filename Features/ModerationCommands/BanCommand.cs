@@ -1,33 +1,27 @@
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.Commands.ContextChecks;
-using ArtcordAdminBot.Features.Helpers;
-using System.IO;
-using System.Net.Http;
-using System.Text.Json.Serialization;
+using DSharpPlus.EventArgs;
+using System.ComponentModel;
 
-namespace ArtcordAdminBot.Features
+namespace ArtcordAdminBot.Features.ModerationCommands
 {
-    public class BanCommand
+    public partial class ModerationCommandGroup
     {
-        private readonly IDatabaseService _databaseService;
         private readonly HttpClient _httpClient;
+        
 
-        public BanCommand(IDatabaseService databaseService)
-        {
-            _databaseService = databaseService;
-            _httpClient = new HttpClient();
-        }
 
         [Command("ban")]
-        [RequirePermissions(DiscordPermissions.BanMembers)] // Placeholder till we have a custom permission handler
-        public async Task BanAsync(CommandContext ctx, 
-        [System.ComponentModel.Description("The user to ban.")]DiscordUser targetUser, 
-        [System.ComponentModel.Description("The reason for the ban.")] string? reason = null, 
-        [System.ComponentModel.Description("The attachment of the reference image.")] DiscordAttachment? attachment = null, 
-        [System.ComponentModel.Description("The ID of the reference message.")] ulong? referenceMessageId = null, 
-        [System.ComponentModel.Description("Additional notes about the ban.")]string? internalNotes = null, 
-        [System.ComponentModel.Description("Choose the timeframe for deleting user messages.")] MessageDeletionTimeframe deleteTimeframe = MessageDeletionTimeframe.None)
+        [RequirePermissions(DiscordPermissions.BanMembers)] 
+        // Placeholder till we have a custom permission handler. Whenever we get a custom permission handler we can just handle permissions on a per group basis.
+        public async Task BanAsync(CommandContext ctx,
+        [Description("The user to ban.")]DiscordUser targetUser, 
+        [Description("The reason for the ban.")] string? reason = null, 
+        [Description("The attachment of the reference image.")] DiscordAttachment? attachment = null, 
+        [Description("The ID of the reference message.")] ulong? referenceMessageId = null, 
+        [Description("Additional notes about the ban.")]string? internalNotes = null, 
+        [Description("Choose the timeframe for deleting user messages.")] MessageDeletionTimeframe deleteTimeframe = MessageDeletionTimeframe.None)
         {
             // Attachment processing
             string? referenceImagePath = null;
@@ -59,6 +53,8 @@ namespace ArtcordAdminBot.Features
                 internalNotes: internalNotes
             );
 
+            reason ??= "No reason provided.";
+
             await ctx.Guild.BanMemberAsync(targetUser, TimeSpan.FromHours((int)deleteTimeframe), reason);
 
             var embed = new DiscordEmbedBuilder
@@ -75,6 +71,24 @@ namespace ArtcordAdminBot.Features
                 Timestamp = DateTime.UtcNow
             };
 
+            var dmEmbed = new DiscordEmbedBuilder
+            {
+                Title = "You Have Been Banned",
+                Color = DiscordColor.Red,
+                Description = $"**Server:** {ctx.Guild.Name}\n" +
+                            $"**Reason:** {reason}\n" +
+                            $"**Appeals:** If you believe this ban was a mistake, please reach out to the moderation team for clarification.",
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
+                {
+                    Url = ctx.Guild.IconUrl
+                },
+                Timestamp = DateTime.UtcNow
+            };
+
+            await targetUser.SendMessageAsync(new DiscordMessageBuilder()
+                .AddEmbeds([dmEmbed.Build()])
+                .AddComponents(new DiscordButtonComponent(DiscordButtonStyle.Primary, "appeal_ban", "Appeal Ban"))
+            );
 
             await ctx.RespondAsync(embed: embed.Build());
         }

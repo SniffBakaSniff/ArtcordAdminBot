@@ -5,8 +5,8 @@ using DSharpPlus.Commands.Processors.TextCommands;
 using DSharpPlus.Commands.Processors.SlashCommands;
 using ArtcordAdminBot.Features;
 using DSharpPlus.Commands.Processors.TextCommands.Parsing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using ArtcordAdminBot.Features.ConfigCommands;
+using ArtcordAdminBot.Features.ModerationCommands;
 
 namespace ArtcordAdminBot
 {
@@ -36,7 +36,7 @@ namespace ArtcordAdminBot
                 // we register our commands here
                 extension =>
                 {
-                    extension.AddCommands([typeof(EchoCommand), typeof(PurgeCommand), typeof(PrefixCommand), typeof(PingCommand), typeof(BanCommand)]);
+                    extension.AddCommands([typeof(EchoCommand), typeof(PingCommand), typeof(ConfigCommandsGroup), typeof(ModerationCommandGroup)]);
                     TextCommandProcessor textCommandProcessor = new(new TextCommandConfiguration
                     {
                        // PrefixResolver = new DefaultPrefixResolver(true, "?", ".").ResolvePrefixAsync

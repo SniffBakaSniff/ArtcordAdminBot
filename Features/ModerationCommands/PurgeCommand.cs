@@ -1,14 +1,11 @@
-using DSharpPlus;
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using ArtcordAdminBot.Features.Helpers;
 
-namespace ArtcordAdminBot.Features
+namespace ArtcordAdminBot.Features.ModerationCommands
 {
+
+    public partial class ModerationCommandGroup {
     [Command("purge")]
     public class PurgeCommand
     {
@@ -65,7 +62,7 @@ namespace ArtcordAdminBot.Features
 
                 DiscordMessage discordMessage = await ConversionHelpers.GetMessage(message, nameof(message), context);
 
-                await foreach (var currentMessage in discordMessage.Channel.GetMessagesAfterAsync(discordMessage.Id))
+                await foreach (var currentMessage in discordMessage.Channel!.GetMessagesAfterAsync(discordMessage.Id))
                 {
                     messages.Add(currentMessage);
                 }
@@ -111,4 +108,5 @@ namespace ArtcordAdminBot.Features
                 );
         }
     }
+}
 }

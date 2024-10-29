@@ -5,3 +5,5 @@ appsettings.json
 *.db
 /Migrations
 /Images
+*.db-wal
+*.db-shm
