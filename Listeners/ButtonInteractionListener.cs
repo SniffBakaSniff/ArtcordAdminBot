@@ -71,15 +71,15 @@ namespace ArtcordAdminBot.Listeners
                 {
                     Title = "Close Ticket",
                     Description = "Are you sure you want to close this ticket?",
-                    Color = DiscordColor.Red // You can choose any color
-                }
-                .AddField("Action Required", "Click the button below to confirm the closure of this ticket.", true);
+                    Color = DiscordColor.Red
+                }.WithFooter("This action cannot be undone.");
 
                 await e.Interaction.CreateResponseAsync(DiscordInteractionResponseType.ChannelMessageWithSource,
                     new DiscordInteractionResponseBuilder()
-                        .AddEmbed(embed.Build()) // Add the embed to the response
+                        .AddEmbed(embed.Build())
                         .AddComponents(
-                            new DiscordButtonComponent(DiscordButtonStyle.Danger, "close_ticket_confirmation", "Confirm")
+                            new DiscordButtonComponent(DiscordButtonStyle.Danger, "close_ticket_confirmation", "Confirm"),
+                            new DiscordButtonComponent(DiscordButtonStyle.Secondary, "close_ticket_cancellation", "Cancel")
                         )
                         .AsEphemeral(true));
             }
@@ -94,6 +94,24 @@ namespace ArtcordAdminBot.Listeners
             else if (e.Id == "close_ticket_confirmation")
             {
                 await e.Channel.DeleteAsync();
+            }
+            else if (e.Id == "close_ticket_cancellation")
+            {
+                var embed = new DiscordEmbedBuilder
+                {
+                    Title = "Close Ticket",
+                    Description = "Ticket closure has been canceled.",
+                    Color = DiscordColor.Green
+                };
+
+                await e.Interaction.CreateResponseAsync(DiscordInteractionResponseType.UpdateMessage,
+                    new DiscordInteractionResponseBuilder()
+                        .AddEmbed(embed.Build())
+                        .AddComponents(
+                            new DiscordButtonComponent(DiscordButtonStyle.Danger, "close_ticket_confirmation", "Confirm", disabled: true),
+                            new DiscordButtonComponent(DiscordButtonStyle.Secondary, "close_ticket_cancellation", "Cancel", disabled: true)
+                        )
+                        .AsEphemeral(true));
             }
         }
     }
