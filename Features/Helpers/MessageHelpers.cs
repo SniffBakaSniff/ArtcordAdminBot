@@ -20,6 +20,13 @@ namespace ArtcordAdminBot.Features.Helpers
                 .WithDescription(message)
                 .WithTimestamp(DateTime.UtcNow)
                 .Build();
-    }
+
+        public static DiscordEmbed GenericUpdateEmbed(string title, string extra = null!, string color = "#00ffff") => new DiscordEmbedBuilder()
+                .WithTitle(title)
+                .WithColor(new DiscordColor(color))
+                .WithTimestamp(DateTime.UtcNow)
+                .AddField("Updated To:" , $"```{extra}```")
+                .Build();
+    };
 }
 

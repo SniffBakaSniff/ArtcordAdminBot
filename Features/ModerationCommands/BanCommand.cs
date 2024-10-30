@@ -70,7 +70,6 @@ namespace ArtcordAdminBot.Features.ModerationCommands
                 Title = "User Banned",
                 Color = DiscordColor.Red,
                 Description = $"**User:** {targetUser.Username}\n" +
-                              $"**Reason:** {reason}\n" +
                               $"**Moderator:** {ctx.User.Username}\n" +
                               $"**Deleted Messages:** {deletionTimeframeInfo}",
                 Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
@@ -78,21 +77,20 @@ namespace ArtcordAdminBot.Features.ModerationCommands
                     Url = targetUser.AvatarUrl
                 },
                 Timestamp = DateTime.UtcNow
-            };
+            }.AddField("Reason", $"```{reason}```");
 
             var dmEmbed = new DiscordEmbedBuilder
             {
                 Title = "You Have Been Banned",
                 Color = DiscordColor.Red,
                 Description = $"**Server:** {ctx.Guild.Name}\n" +
-                            $"**Reason:** {reason}\n" +
                             $"**Appeals:** If you believe this ban was a mistake, please reach out to the moderation team for clarification.",
                 Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
                 {
                     Url = guildIconUrl
                 },
                 Timestamp = DateTime.UtcNow
-            };
+            }.AddField("Reason", $"```{reason}```");
 
             await targetUser.SendMessageAsync(new DiscordMessageBuilder()
                 .AddEmbeds([dmEmbed.Build()])

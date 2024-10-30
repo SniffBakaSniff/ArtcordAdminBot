@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 public interface IDatabaseService
 {
-    Task<ulong?> GetMessageCountForTicketAsync(ulong ticketId);
     Task<ulong?> GetLogsChannelAsync(ulong guildId);
     Task<string> GetPrefixAsync(ulong guildId);
     Task SetPrefixAsync(ulong guildId, string prefix);
@@ -33,6 +32,12 @@ public interface IDatabaseService
         string reason,
         DateTime openedAt,
         DateTime? closedAt = null);
+
+    Task<string?> ManageMessageSettingAsync(ulong guildId, string messageType, string? newMessage = null);
+    Task<ulong?> GetWelcomeChannelAsync(ulong guildId);
+    Task SetWelcomeChannelAsync(ulong guildId, ulong? welcomeChannelId);
+    Task<ulong?> GetFarewellChannelAsync(ulong guildId);
+    Task SetFarewellChannelAsync(ulong guildId, ulong? farewellChannelId);
 }
 
 public class DatabaseService : IDatabaseService
@@ -46,6 +51,18 @@ public class DatabaseService : IDatabaseService
         {
             settings = new GuildSettings { GuildId = guildId };
             dbContext.GuildSettings.Add(settings);
+        }
+
+        return settings;
+    }
+    private async Task<GuildMessageSettings> GuildMessageSettingsAsync(BotDbContext dbContext, ulong guildId)
+    {
+        var settings = await dbContext.GuildMessageSettings.FindAsync(guildId);
+
+        if (settings == null)
+        {
+            settings = new GuildMessageSettings { GuildId = guildId };
+            dbContext.GuildMessageSettings.Add(settings);
         }
 
         return settings;
@@ -225,18 +242,112 @@ public class DatabaseService : IDatabaseService
         }
     }
 
-    public async Task<ulong?> GetMessageCountForTicketAsync(ulong ticketId)
+    public async Task<string?> ManageMessageSettingAsync(ulong guildId, string messageType, string? newMessage = null)
     {
         using (var dbContext = new BotDbContext())
         {
-            // Count the number of messages for the specified ticket ID
-            int count = await dbContext.TicketMessages
-                .CountAsync(m => m.TicketId == ticketId);
+            var settings = await GuildMessageSettingsAsync(dbContext, guildId);
 
-            // Return the count as ulong?
-            return (ulong?)count;
+            switch (messageType.ToLower())
+            {
+                case "appeal":
+                    if (newMessage != null)
+                    {
+                        settings.AppealMessage = newMessage;
+                        await dbContext.SaveChangesAsync();
+                    }
+                    return settings.AppealMessage;
+
+                case "welcome":
+                    if (newMessage != null)
+                    {
+                        settings.WelcomeMessage = newMessage;
+                        await dbContext.SaveChangesAsync();
+                    }
+                    return settings.WelcomeMessage;
+
+                case "farewell":
+                    if (newMessage != null)
+                    {
+                        settings.FarewellMessage = newMessage;
+                        await dbContext.SaveChangesAsync();
+                    }
+                    return settings.FarewellMessage;
+
+                case "mutednotification":
+                    if (newMessage != null)
+                    {
+                        settings.MutedNotificationMessage = newMessage;
+                        await dbContext.SaveChangesAsync();
+                    }
+                    return settings.MutedNotificationMessage;
+
+                case "ticketcreation":
+                    if (newMessage != null)
+                    {
+                        settings.TicketCreationMessage = newMessage;
+                        await dbContext.SaveChangesAsync();
+                    }
+                    return settings.TicketCreationMessage;
+
+                case "ticketclosure":
+                    if (newMessage != null)
+                    {
+                        settings.TicketClosureMessage = newMessage;
+                        await dbContext.SaveChangesAsync();
+                    }
+                    return settings.TicketClosureMessage;
+                    
+
+                case "error":
+                    if (newMessage != null)
+                    {
+                        settings.ErrorMessage = newMessage;
+                    }
+                    return settings.ErrorMessage;
+
+                default:
+                    throw new ArgumentException("Invalid message type specified.");
+            }
         }
     }
 
+    public async Task<ulong?> GetWelcomeChannelAsync(ulong guildId)
+    {
+        using (var dbContext = new BotDbContext())
+        {
+            var settings = await GuildSettingsAsync(dbContext, guildId);
+            return settings?.WelcomeChannelId;
+        }
+    }
+
+    public async Task SetWelcomeChannelAsync(ulong guildId, ulong? welcomeChannelId)
+    {
+        using (var dbContext = new BotDbContext())
+        {
+            var settings = await GuildSettingsAsync(dbContext, guildId);
+            settings!.WelcomeChannelId = welcomeChannelId;
+            await dbContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task<ulong?> GetFarewellChannelAsync(ulong guildId)
+    {
+        using (var dbContext = new BotDbContext())
+        {
+            var settings = await GuildSettingsAsync(dbContext, guildId);
+            return settings?.FarewellChannelId;
+        }
+    }
+
+    public async Task SetFarewellChannelAsync(ulong guildId, ulong? farewellChannelId)
+    {
+        using (var dbContext = new BotDbContext())
+        {
+            var settings = await GuildSettingsAsync(dbContext, guildId);
+            settings!.FarewellChannelId = farewellChannelId;
+            await dbContext.SaveChangesAsync();
+        }
+    }
 }
 

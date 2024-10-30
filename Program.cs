@@ -24,7 +24,7 @@ namespace ArtcordAdminBot
             }
 
             DiscordClientBuilder builder = DiscordClientBuilder
-                .CreateDefault(discordToken, TextCommandProcessor.RequiredIntents | SlashCommandProcessor.RequiredIntents | DiscordIntents.MessageContents)
+                .CreateDefault(discordToken, TextCommandProcessor.RequiredIntents | SlashCommandProcessor.RequiredIntents | DiscordIntents.MessageContents | DiscordIntents.GuildMembers)
                 .ConfigureServices(services => 
                 {
                     services.AddDbContext<BotDbContext>();
@@ -35,11 +35,14 @@ namespace ArtcordAdminBot
 
             var buttonInteractionHandler = new ButtonInteractionListener(new DatabaseService());
             var ticketMessageLogger = new TicketMessageLogger(new DatabaseService());
+            var joinLeaveListener = new JoinLeaveListener(new DatabaseService());
 
             builder.ConfigureEventHandlers(b =>
             {
                 b.HandleComponentInteractionCreated(buttonInteractionHandler.HandleButtonInteraction);
                 b.HandleMessageCreated(ticketMessageLogger.LogTicketMessages);
+                b.HandleGuildMemberAdded(joinLeaveListener.OnMemberJoined);
+                b.HandleGuildMemberRemoved(joinLeaveListener.OnMemberLeft);
             });
 
             // Use the commands extension
@@ -77,7 +80,5 @@ namespace ArtcordAdminBot
 
             await Task.Delay(-1);
         }
-
     }
-    
 }
