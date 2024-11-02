@@ -1,6 +1,6 @@
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
-using ArtcordAdminBot.Features.Helpers;
+using ArtcordAdminBot.Helpers;
 
 namespace ArtcordAdminBot.Features.ModerationCommands
 {

@@ -1,6 +1,6 @@
 using DSharpPlus.Commands.Processors.SlashCommands.ArgumentModifiers;
 
-using ArtcordAdminBot.Features.Helpers;
+using ArtcordAdminBot.Helpers;
 using DSharpPlus.Commands;
 
 using System.Threading.Tasks;
@@ -26,7 +26,7 @@ namespace ArtcordAdminBot.Features.ConfigCommands
                 return;
             }
 
-            await _databaseService.SetWelcomeChannelAsync(ctx.Guild!.Id, channel.Id);
+            await _guildSettingsService.SetWelcomeChannelAsync(ctx.Guild!.Id, channel.Id);
             await ctx.RespondAsync(
                 MessageHelpers.GenericUpdateEmbed("Welcome Channel Updated!\n", extra: channel.Mention)
             );
@@ -47,7 +47,7 @@ namespace ArtcordAdminBot.Features.ConfigCommands
                 return;
             }
 
-            await _databaseService.SetFarewellChannelAsync(ctx.Guild!.Id, channel.Id);
+            await _guildSettingsService.SetFarewellChannelAsync(ctx.Guild!.Id, channel.Id);
             await ctx.RespondAsync(
                 MessageHelpers.GenericUpdateEmbed("Farewell Message Updated!\n", extra: channel.Mention)
             );

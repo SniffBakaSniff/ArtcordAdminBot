@@ -45,7 +45,7 @@ namespace ArtcordAdminBot.Features.ModerationCommands
             }
 
             // Create the ban record in the database
-            await _databaseService.NewBanRecordAsync(
+            await _banService.NewBanRecordAsync(
                 guildId: ctx.Guild!.Id,
                 userId: targetUser.Id,
                 moderatorId: ctx.User.Id,

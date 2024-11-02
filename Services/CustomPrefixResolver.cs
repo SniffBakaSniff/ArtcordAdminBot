@@ -4,11 +4,11 @@ using DSharpPlus.Commands.Processors.TextCommands.Parsing;
 
 public class CustomPrefixResolver : IPrefixResolver
 {
-    private readonly IDatabaseService _database;
+    private readonly IGuildSettingsService _guildSettingsService;
 
-    public CustomPrefixResolver(IDatabaseService database)
+    public CustomPrefixResolver(IGuildSettingsService guildSettingsService)
     {
-        _database = database;
+        _guildSettingsService = guildSettingsService;
     }
 
     public async ValueTask<int> ResolvePrefixAsync(CommandsExtension extension, DiscordMessage message)
@@ -21,7 +21,7 @@ public class CustomPrefixResolver : IPrefixResolver
         if (message.Channel.GuildId.HasValue)
         {
             var guildId = message.Channel.GuildId.Value;
-            var prefix = await _database.GetPrefixAsync(guildId);
+            var prefix = await _guildSettingsService.GetPrefixAsync(guildId);
             if (message.Content.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
             {
                 return prefix.Length;

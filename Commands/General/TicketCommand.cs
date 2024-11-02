@@ -6,11 +6,13 @@ using DSharpPlus;
 
 public class TicketCommands
 {
-    private readonly IDatabaseService _databaseService;
+    private readonly ITicketService _ticketService;
+    private readonly IGuildSettingsService _guildSettingsService;
 
-    public TicketCommands(IDatabaseService databaseService)
+    public TicketCommands(ITicketService ticketService, IGuildSettingsService guildSettingsService)
     {
-        _databaseService = databaseService;
+        _ticketService = ticketService;
+        _guildSettingsService = guildSettingsService;
     }
 
     [Command("ticket")]
@@ -41,7 +43,7 @@ public class TicketCommands
 
     private async Task<DiscordChannel> CreateTicketChannelAsync(CommandContext ctx, DiscordUser user, string reason)
     {
-        ulong ticketNumber = (ulong)await _databaseService.GetTicketCountAsync(guildId: ctx.Guild!.Id, userId: user.Id);
+        ulong ticketNumber = (ulong)await _ticketService.GetTicketCountAsync(guildId: ctx.Guild!.Id, userId: user.Id);
         string ticketChannelName = $"{user.Username}-ticket-{ticketNumber}";
 
         var ticketChannel = await ctx.Guild!.CreateChannelAsync(
@@ -76,7 +78,7 @@ public class TicketCommands
         );
 
         // Log the ticket record in the database
-        await _databaseService.NewTicketRecordAsync(
+        await _ticketService.NewTicketRecordAsync(
             guildId: ctx.Guild.Id,
             channelId: ticketChannel.Id,
             userId: user.Id,
@@ -89,7 +91,7 @@ public class TicketCommands
 
     private async Task LogTicketAsync(CommandContext ctx, DiscordGuild guild, DiscordUser user, string reason)
     {
-        ulong? LogsChannelId = await _databaseService.GetLogsChannelAsync(ctx.Guild!.Id);
+        ulong? LogsChannelId = await _guildSettingsService.GetLogsChannelAsync(ctx.Guild!.Id);
 
         if (LogsChannelId is null)
         {

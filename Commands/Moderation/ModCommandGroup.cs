@@ -9,11 +9,13 @@ namespace ArtcordAdminBot.Features.ModerationCommands
     public partial class ModerationCommandGroup
     {
 
-        private readonly IDatabaseService _databaseService;
+        private readonly IBanService _banService;
+        private readonly IGuildSettingsService _guildSettingsService;
 
-        public ModerationCommandGroup(IDatabaseService databaseService)
+        public ModerationCommandGroup(IBanService banService, IGuildSettingsService guildSettingsService)
         {
-            _databaseService = databaseService;
+            _banService = banService;
+            _guildSettingsService = guildSettingsService;
             _httpClient = new HttpClient();
         }
     }

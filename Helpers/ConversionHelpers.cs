@@ -3,7 +3,7 @@ using DSharpPlus.Entities;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ArtcordAdminBot.Features.Helpers
+namespace ArtcordAdminBot.Helpers
 {
     /// <summary>
     /// Converting string arguments into the correct types
@@ -49,7 +49,7 @@ namespace ArtcordAdminBot.Features.Helpers
         {
             ulong guildId, channelId, messageId;
 
-            guildId = context.Guild.Id;
+            guildId = context.Guild!.Id;
 
             // TODO: Make this work with providing a channel as well (once channel parsing is done),
             // with a syntax like: `[channel]:[message]` where [channel] is the parsed channel (id or link) and [message] is the message id, whitespace shouldn't matter
@@ -84,7 +84,7 @@ namespace ArtcordAdminBot.Features.Helpers
 
                 return message;
             }
-            catch (DSharpPlus.Exceptions.NotFoundException ex)
+            catch (DSharpPlus.Exceptions.NotFoundException)
             {
                 throw new Exception("Message not found.", argumentName, Type.Message);
             }

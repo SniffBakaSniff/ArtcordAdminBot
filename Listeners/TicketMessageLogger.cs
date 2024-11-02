@@ -6,21 +6,21 @@ namespace ArtcordAdminBot.Listeners
     public class TicketMessageLogger
     {
 
-        private readonly IDatabaseService _database;
+        private readonly ITicketService _ticketService;
 
-        public TicketMessageLogger(IDatabaseService database)
+        public TicketMessageLogger(ITicketService ticketService)
         {
-            _database = database ?? throw new ArgumentNullException(nameof(database));
+            _ticketService = ticketService ?? throw new ArgumentNullException(nameof(ticketService));
         }
        
         public async Task LogTicketMessages(DiscordClient client, MessageCreatedEventArgs e)
         {
-            var (ticketId, userId) = await _database.GetTicketIdForChannelAsync(e.Channel.Id);
+            var (ticketId, userId) = await _ticketService.GetTicketIdForChannelAsync(e.Channel.Id);
             var messageType = e.Author.Id == userId ? TicketMessageType.Moderator : TicketMessageType.Submitter;
             if(ticketId.HasValue) 
             {
                 Console.WriteLine(e.Message.Content);
-                await _database.LogTicketMessageAsync(ticketId: ticketId.Value, userId: e.Author.Id, messageType: messageType, content: e.Message.Content);
+                await _ticketService.LogTicketMessageAsync(ticketId: ticketId.Value, userId: e.Author.Id, messageType: messageType, content: e.Message.Content);
             }
         }
     }

@@ -1,4 +1,4 @@
-using ArtcordAdminBot.Features.Helpers;
+using ArtcordAdminBot.Helpers;
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 
@@ -6,12 +6,12 @@ namespace ArtcordAdminBot.Features.ModerationCommands
 {
     public partial class ModerationCommandGroup
     {
-        [Command("mute")]
-        [System.ComponentModel.Description("Mutes a user")]
-        public async Task MuteAsync(CommandContext ctx,
-        [System.ComponentModel.Description("The user to mute.")] DiscordUser targetUser)
+        [Command("unmute")]
+        [System.ComponentModel.Description("Unmutes a user")]
+        public async Task UnMuteAsync(CommandContext ctx,
+        [System.ComponentModel.Description("The user to Unmute.")] DiscordUser targetUser)
         {
-            ulong? mutedRoleId = await _databaseService.GetMutedRoleAsync(ctx.Guild!.Id);
+            var mutedRoleId = await _guildSettingsService.GetMutedRoleAsync(ctx.Guild!.Id);
             if (mutedRoleId == null)
             {
                 await ctx.RespondAsync(MessageHelpers.GenericErrorEmbed("Muted role not set. Please configure the muted role with `/config setmutedrole`."));
@@ -26,10 +26,10 @@ namespace ArtcordAdminBot.Features.ModerationCommands
             }
 
             var targetMember = await ctx.Guild.GetMemberAsync(targetUser.Id);
-            await targetMember.GrantRoleAsync(mutedRole);
+            await targetMember.RevokeRoleAsync(mutedRole);
 
-            await ctx.RespondAsync(MessageHelpers.GenericSuccessEmbed($"User Muted", $"{targetUser.Mention} has been muted."));
-            await targetUser.SendMessageAsync(MessageHelpers.GenericErrorEmbed("You have been muted", $"You have been muted from {ctx.Guild.Name}."));
+            await ctx.RespondAsync(MessageHelpers.GenericSuccessEmbed($"User Unmuted", $"{targetUser.Mention} has been unmuted."));
+            await targetUser.SendMessageAsync(MessageHelpers.GenericSuccessEmbed("You have been unmuted", $"You have been unmuted from {ctx.Guild.Name}."));
         }
     }
 }

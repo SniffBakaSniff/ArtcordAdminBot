@@ -1,7 +1,7 @@
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.Commands.ContextChecks;
-using ArtcordAdminBot.Features.Helpers;
+using ArtcordAdminBot.Helpers;
 
 
 namespace ArtcordAdminBot.Features.ConfigCommands
@@ -18,7 +18,7 @@ namespace ArtcordAdminBot.Features.ConfigCommands
                 return;
             }
 
-            await _databaseService.SetMutedRoleAsync(ctx.Guild!.Id, mutedRoleId.Id);
+            await _guildSettingsService.SetMutedRoleAsync(ctx.Guild!.Id, mutedRoleId.Id);
             await ctx.RespondAsync(
                 MessageHelpers.GenericSuccessEmbed("Muted Role Updated", $"Muted Role successfully updated to {mutedRoleId.Mention}.")
             );

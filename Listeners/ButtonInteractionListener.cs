@@ -7,19 +7,19 @@ namespace ArtcordAdminBot.Listeners
     public class ButtonInteractionListener
     {
 
-        private readonly IDatabaseService _databaseService;
+        private readonly ITicketService _ticketService;
 
 
-        public ButtonInteractionListener(IDatabaseService databaseService)
+        public ButtonInteractionListener(ITicketService ticketService)
         {
-            _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
+            _ticketService = ticketService ?? throw new ArgumentNullException(nameof(ticketService));
         }
 
         public async Task HandleButtonInteraction(DiscordClient client, ComponentInteractionCreatedEventArgs e)
         {
             if (e.Id == "claim_ticket")
             {
-                var (ticketId, userId) = await _databaseService.GetTicketIdForChannelAsync(e.Channel.Id);
+                var (ticketId, userId) = await _ticketService.GetTicketIdForChannelAsync(e.Channel.Id);
 
                 if (!ticketId.HasValue)
                 {
@@ -28,7 +28,7 @@ namespace ArtcordAdminBot.Listeners
                     return;
                 }
 
-                bool isClaimed = await _databaseService.GetTicketClaimedStatusAsync(ticketId.Value);
+                bool isClaimed = await _ticketService.GetTicketClaimedStatusAsync(ticketId.Value);
 
                 if (isClaimed)
                 {

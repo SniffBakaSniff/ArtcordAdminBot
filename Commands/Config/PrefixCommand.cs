@@ -1,7 +1,7 @@
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.Commands.ContextChecks;
-using ArtcordAdminBot.Features.Helpers;
+using ArtcordAdminBot.Helpers;
 
 
 namespace ArtcordAdminBot.Features.ConfigCommands
@@ -25,7 +25,7 @@ namespace ArtcordAdminBot.Features.ConfigCommands
             }
 
             newPrefix = newPrefix.ToLower();
-            await _databaseService.SetPrefixAsync(ctx.Guild!.Id, newPrefix);
+            await _guildSettingsService.SetPrefixAsync(ctx.Guild!.Id, newPrefix);
 
             await ctx.RespondAsync(
                 MessageHelpers.GenericSuccessEmbed("Prefix updated", $"Prefix successfully updated to `{newPrefix}`.")
