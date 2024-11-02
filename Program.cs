@@ -9,6 +9,7 @@ using ArtcordAdminBot.Features.ConfigCommands;
 using ArtcordAdminBot.Features.ModerationCommands;
 using ArtcordAdminBot.Listeners;
 using System.Runtime.CompilerServices;
+using ArtcordAdminBot.Services.Database;
 
 namespace ArtcordAdminBot
 {
@@ -29,13 +30,16 @@ namespace ArtcordAdminBot
                 {
                     services.AddDbContext<BotDbContext>();
                     services.AddScoped<IPrefixResolver, CustomPrefixResolver>();
-                    services.AddScoped<IDatabaseService, DatabaseService>();
+                    services.AddScoped<IBanService, BanService>();
+                    services.AddScoped<IGuildSettingsService, GuildSettingsService>();
+                    services.AddScoped<IMessageSettingsService, MessageSettingsService>();
+                    services.AddScoped<ITicketService, TicketService>();
                 });
 
 
-            var buttonInteractionHandler = new ButtonInteractionListener(new DatabaseService());
-            var ticketMessageLogger = new TicketMessageLogger(new DatabaseService());
-            var joinLeaveListener = new JoinLeaveListener(new DatabaseService());
+            var buttonInteractionHandler = new ButtonInteractionListener(new TicketService());
+            var ticketMessageLogger = new TicketMessageLogger(new TicketService());
+            var joinLeaveListener = new JoinLeaveListener(new MessageSettingsService(), new GuildSettingsService());
 
             builder.ConfigureEventHandlers(b =>
             {

@@ -1,5 +1,5 @@
 ﻿
-using ArtcordAdminBot.Features.Helpers;
+using ArtcordAdminBot.Helpers;
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 

@@ -2,13 +2,6 @@ namespace ArtcordAdminBot.Services.Database
 {
     public class MessageSettingsService : IMessageSettingsService
     {
-        private readonly BotDbContext _dbContext;
-
-        public MessageSettingsService(BotDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
         public async Task<string?> ManageMessageSettingAsync(ulong guildId, string messageType, string? newMessage = null)
         {
             using (var dbContext = new BotDbContext())

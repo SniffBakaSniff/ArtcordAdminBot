@@ -32,7 +32,7 @@ namespace ArtcordAdminBot.Listeners
             }
         }
 
-        public async Task OnMemberLeft(GuildMemberRemovedEventArgs e)
+        public async Task OnMemberLeft(DiscordClient client, GuildMemberRemovedEventArgs e)
         {
             string? farewellMessage = await _ticketSettingsService.ManageMessageSettingAsync(e.Guild.Id, "farewell");
             ulong? farewellChannelId = await _guildSettingsService.GetFarewellChannelAsync(e.Guild.Id);
