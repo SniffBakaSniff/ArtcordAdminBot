@@ -1,8 +1,8 @@
-using ArtcordAdminBot.Helpers;
+using ArtcordBot.Helpers;
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 
-namespace ArtcordAdminBot.Features.ModerationCommands
+namespace ArtcordBot.Features.ModerationCommands
 {
     public partial class ModerationCommandGroup
     {

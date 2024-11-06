@@ -1,12 +1,12 @@
 using DSharpPlus.Commands.Processors.SlashCommands.ArgumentModifiers;
 
-using ArtcordAdminBot.Helpers;
+using ArtcordBot.Helpers;
 using DSharpPlus.Commands;
 
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
 
-namespace ArtcordAdminBot.Features.ConfigCommands
+namespace ArtcordBot.Features.ConfigCommands
 {
     public partial class ConfigCommandsGroup
     {

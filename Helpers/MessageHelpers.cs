@@ -1,7 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using System.Threading.Channels;
 
-namespace ArtcordAdminBot.Helpers
+namespace ArtcordBot.Helpers
 {
     /// <summary>
     /// Presets for embed response messages

@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace ArtcordAdminBot.Services.Database
+namespace ArtcordBot.Services.Database
 {
 
     public class TicketService : ITicketService

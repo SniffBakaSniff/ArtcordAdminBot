@@ -2,7 +2,7 @@ using DSharpPlus;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Entities;
 
-namespace ArtcordAdminBot.Listeners
+namespace ArtcordBot.Listeners
 {
     public class JoinLeaveListener
     {

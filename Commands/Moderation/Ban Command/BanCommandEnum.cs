@@ -15,3 +15,11 @@ public enum MessageDeletionTimeframe
     [ChoiceDisplayName("Past Week")]
     OneWeek = 168
 }
+
+public enum AppealStatus
+
+{
+    Pending,
+    Approved,
+    Denied
+}

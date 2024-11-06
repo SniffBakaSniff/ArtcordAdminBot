@@ -3,7 +3,7 @@ using DSharpPlus.Entities;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ArtcordAdminBot.Helpers
+namespace ArtcordBot.Helpers
 {
     /// <summary>
     /// Converting string arguments into the correct types

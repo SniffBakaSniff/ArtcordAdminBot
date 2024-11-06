@@ -1,7 +1,7 @@
 using DSharpPlus;
 using DSharpPlus.EventArgs;
 
-namespace ArtcordAdminBot.Listeners
+namespace ArtcordBot.Listeners
 {
     public class TicketMessageLogger
     {

@@ -1,9 +1,9 @@
-﻿using ArtcordAdminBot.Helpers;
+﻿using ArtcordBot.Helpers;
 using DSharpPlus.Commands;
 using DSharpPlus.Commands.EventArgs;
 using System;
 
-namespace ArtcordAdminBot
+namespace ArtcordBot
 {
     public class EventHandlers
     {

@@ -5,7 +5,7 @@ using DSharpPlus.EventArgs;
 using System.ComponentModel;
 using DSharpPlus;
 
-namespace ArtcordAdminBot.Features.ModerationCommands
+namespace ArtcordBot.Features.ModerationCommands
 {
     public partial class ModerationCommandGroup
     {

@@ -2,7 +2,7 @@ using DSharpPlus.Commands;
 using DSharpPlus.Commands.ContextChecks;
 using DSharpPlus.Entities;
 
-namespace ArtcordAdminBot.Features.ConfigCommands
+namespace ArtcordBot.Features.ConfigCommands
 {
     [Command("config")]
     [RequirePermissions(DiscordPermissions.Administrator)]

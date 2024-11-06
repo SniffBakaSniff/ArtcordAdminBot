@@ -1,4 +1,4 @@
-namespace ArtcordAdminBot.Services.Database
+namespace ArtcordBot.Services.Database
 {
     public class GuildSettingsService : IGuildSettingsService
     {

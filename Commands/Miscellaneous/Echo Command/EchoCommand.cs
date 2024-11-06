@@ -1,9 +1,9 @@
 ﻿
-using ArtcordAdminBot.Helpers;
+using ArtcordBot.Helpers;
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 
-namespace ArtcordAdminBot.Features
+namespace ArtcordBot.Features
 {
     [Command("echo")]
     public class EchoCommand

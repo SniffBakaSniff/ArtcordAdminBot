@@ -1,10 +1,10 @@
 using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.Commands.ContextChecks;
-using ArtcordAdminBot.Helpers;
+using ArtcordBot.Helpers;
 
 
-namespace ArtcordAdminBot.Features.ConfigCommands
+namespace ArtcordBot.Features.ConfigCommands
 {
     public partial class ConfigCommandsGroup
     {

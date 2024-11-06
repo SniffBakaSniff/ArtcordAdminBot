@@ -2,7 +2,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 
-namespace ArtcordAdminBot.Listeners
+namespace ArtcordBot.Listeners
 {
     public class ButtonInteractionListener
     {

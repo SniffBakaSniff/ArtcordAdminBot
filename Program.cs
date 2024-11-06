@@ -3,15 +3,15 @@ using DSharpPlus.Entities;
 using DSharpPlus.Commands;
 using DSharpPlus.Commands.Processors.TextCommands;
 using DSharpPlus.Commands.Processors.SlashCommands;
-using ArtcordAdminBot.Features;
+using ArtcordBot.Features;
 using DSharpPlus.Commands.Processors.TextCommands.Parsing;
-using ArtcordAdminBot.Features.ConfigCommands;
-using ArtcordAdminBot.Features.ModerationCommands;
-using ArtcordAdminBot.Listeners;
+using ArtcordBot.Features.ConfigCommands;
+using ArtcordBot.Features.ModerationCommands;
+using ArtcordBot.Listeners;
 using System.Runtime.CompilerServices;
-using ArtcordAdminBot.Services.Database;
+using ArtcordBot.Services.Database;
 
-namespace ArtcordAdminBot
+namespace ArtcordBot
 {
     class Program
     {

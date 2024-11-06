@@ -2,7 +2,7 @@ using DSharpPlus.Commands;
 using DSharpPlus.Commands.ContextChecks;
 using DSharpPlus.Entities;
 
-namespace ArtcordAdminBot.Features.ModerationCommands
+namespace ArtcordBot.Features.ModerationCommands
 {
     [Command("mod")]
     [RequirePermissions(DiscordPermissions.Administrator)] // Placeholder till custom permissions handler is in place

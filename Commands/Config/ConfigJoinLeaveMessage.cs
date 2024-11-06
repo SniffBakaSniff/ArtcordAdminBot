@@ -1,9 +1,9 @@
-using ArtcordAdminBot.Helpers;
+using ArtcordBot.Helpers;
 using DSharpPlus.Commands;
 
 using System.Threading.Tasks;
 
-namespace ArtcordAdminBot.Features.ConfigCommands
+namespace ArtcordBot.Features.ConfigCommands
 {
     public partial class ConfigCommandsGroup
     {
