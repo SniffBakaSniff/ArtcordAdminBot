@@ -2,43 +2,58 @@ using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using System.ComponentModel;
 using DSharpPlus;
+using DSharpPlus.Commands.Processors.TextCommands;
 
-
-public class TicketCommands
+[Command("ticket")]
+[Description("Commands For the Ticket System")]
+public partial class TicketCommandGroup
 {
     private readonly ITicketService _ticketService;
     private readonly IGuildSettingsService _guildSettingsService;
 
-    public TicketCommands(ITicketService ticketService, IGuildSettingsService guildSettingsService)
+    public TicketCommandGroup(ITicketService ticketService, IGuildSettingsService guildSettingsService)
     {
         _ticketService = ticketService;
         _guildSettingsService = guildSettingsService;
     }
 
-    [Command("ticket")]
-    [Description("Creates a support ticket.")]
+    [Command("create")]
     public async Task TicketAsync(CommandContext ctx, [Description("Reason for the ticket.")] string reason)
     {
+        if (ctx is TextCommandContext textContext)
+        {
+            
+            await ctx.RespondAsync(new DiscordEmbedBuilder()
+            {
+                Description = "Please use `/ticket create` isntead.",
+            }.Build());
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(reason))
         {
             await ctx.RespondAsync("Please provide a reason for your ticket.");
             return;
         }
+        await ctx.RespondAsync(new DiscordInteractionResponseBuilder().WithContent("Creating ticket...").AsEphemeral());
 
-        // Create a dedicated ticket channel
+
         var ticketChannel = await CreateTicketChannelAsync(ctx, ctx.User, reason);
 
         // Log the ticket in the private log channel
         await LogTicketAsync(ctx, ctx.Guild!, ctx.User, reason);
 
-        // Confirm to the user
+        // Confirm to the user in a follow-up message
         var embed = new DiscordEmbedBuilder
         {
             Title = "Ticket Created",
             Description = $"Your ticket has been logged. Please check {ticketChannel.Mention}.",
             Color = DiscordColor.Green
         };
-        await ctx.User.SendMessageAsync(embed.Build());
+
+        await ctx.EditResponseAsync(new DiscordFollowupMessageBuilder().WithContent("Ticket Created!")
+            .AddEmbed(embed)
+            .AsEphemeral());
     }
 
     private async Task<DiscordChannel> CreateTicketChannelAsync(CommandContext ctx, DiscordUser user, string reason)

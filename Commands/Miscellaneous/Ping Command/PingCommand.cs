@@ -20,7 +20,10 @@ namespace ArtcordBot.Features
                 .WithColor(DiscordColor.Cyan)
                 .WithTimestamp(DateTime.UtcNow);
 
-            await ctx.RespondAsync(embed.Build());
+            var msg = new DiscordInteractionResponseBuilder().AsEphemeral().AddEmbed(embed);
+
+            await ctx.RespondAsync(msg);
+
         }
     }
 }
